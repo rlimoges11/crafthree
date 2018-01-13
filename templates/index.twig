@@ -1,0 +1,6 @@
+{% extends"_layout.twig" %}
+{% import "macros/content.twig" as content %}
+
+{% block content %}
+    {{ content.print(entry.body) }}
+{% endblock %}

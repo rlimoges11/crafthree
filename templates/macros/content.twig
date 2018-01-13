@@ -1,0 +1,31 @@
+{% macro print(contentMatrix) %}
+
+    {% for block in contentMatrix %}
+
+        {% if block.type == "heading" %}
+
+            <h3>{{ block.text }}</h3>
+
+        {% elseif block.type == "paragraph" %}
+
+            {{ block.text}}
+
+        {% elseif block.type == "image" %}
+
+            {% set image = block.image.first() %}
+            {% if image %}
+                <img src="{{ image.getUrl('thumb') }}" width="{{ image.getWidth('thumb') }}" height="{{ image.getHeight('thumb') }}" alt="{{ image.title }}">
+            {% endif %}
+
+        {% elseif block.type == "quote" %}
+
+            <blockquote>
+                <p>{{ block.quote }}</p>
+                <cite>– {{ block.cite }}</cite>
+            </blockquote>
+
+        {% endif %}
+
+    {% endfor %}
+
+{% endmacro %}
