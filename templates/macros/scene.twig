@@ -1,15 +1,14 @@
 {% macro print(scene) %}
-
+    {
     {% for block in scene %}
-
         {% if block.type == "sphere" %}
-
-            <h3>Sphere</h3>
-            <p><strong>Radius:</strong> {{ block.radius }}</p>
-            <p><strong>Color:</strong> {{ block.color}}</p>
+            "sphere{{ block.id }}":{
+            "type": "{{ block.type }}",
+            "radius": "{{ block.radius }}",
+            "color": "{{ block.color }}"
+            },
 
         {% endif %}
-
     {% endfor %}
-
+    }
 {% endmacro %}

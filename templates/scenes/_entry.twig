@@ -1,6 +1,5 @@
-{% extends"_layout.twig" %}
+{% extends"_threejs.twig" %}
 {% import "macros/scene.twig" as scene %}
-
-{% block content %}
+{% block scene %}
     {{ scene.print(entry.scene) }}
 {% endblock %}
