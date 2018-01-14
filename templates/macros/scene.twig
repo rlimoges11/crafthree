@@ -4,14 +4,14 @@
         {% for block in scene %}
         var data = [];
 
-        {% if block.type == "sphere" %}
+        {% if block.type == "planet" %}
         data["name"] = "{{ block.type }}-{{ block.id }}";
         data["type"] = "{{ block.type }}";
         data["id"] = "{{ block.id }}";
         data["color"] = "{{ block.color.hex }}";
         data["radius"] = {{ block.radius }};
         data["x"] = {{ block.posX }};
-        data["y"] = {{ block.posY }};
+        data["z"] = {{ block.posZ }};
         {% endif %}
 
 

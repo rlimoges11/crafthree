@@ -32,8 +32,9 @@ var engine = function () {
         engine.scene.add(engine.pLight);
 
         engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-        engine.camera.position.z = 12;
-        engine.camera.position.y = 8;
+        engine.camera.position.x = 0;
+        engine.camera.position.z = 500;
+        engine.camera.position.y = 10;
 
         // engine.controls = new THREE.JetpackControls(engine.camera);
         // engine.controls.movementSpeed = 150;
@@ -42,11 +43,11 @@ var engine = function () {
         // engine.controls.autoForward = false;
         // engine.controls.dragToLook = false;
 
-        engine.gridSize = 160;
-        engine.gridSegments = 40;
+        engine.gridSize = 2000;
+        engine.gridSegments = 50;
 
         engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments);
-        engine.grid.opacity = 0.3;
+        engine.grid.opacity = 0.05;
         engine.grid.transparent = true;
         engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
 
@@ -72,10 +73,10 @@ var engine = function () {
         var p1 = engine.gridSegments / 4 - 1;
         var p2 = engine.gridSegments * 0.75 - 1;
 
-        engine.paintGrid(p1, p1, 2);
-        engine.paintGrid(p1, p2, 5);
-        engine.paintGrid(p2, p1, 4);
-        engine.paintGrid(p2, p2, 1);
+        // engine.paintGrid(p1, p1, 2);
+        // engine.paintGrid(p1, p2, 5);
+        // engine.paintGrid(p2, p1, 4);
+        // engine.paintGrid(p2, p2, 1);
 
 
         for (var i = 0, len = engine.json.length; i < len; i++) {
@@ -109,7 +110,7 @@ var engine = function () {
         engine.pLight.position.z = engine.camera.position.z;
         engine.pLight.position.x = engine.camera.position.x;
         engine.pLight.lookAt(engine.scene.position);
-        // engine.controls.update(delta);
+        engine.controls.update(delta);
         engine.stats.update();
         engine.renderer.render(engine.scene, engine.camera);
     };
@@ -119,18 +120,17 @@ var engine = function () {
         console.log("Add:", data);
 
         switch (data.type) {
-            case "sphere": {
+            case "planet": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
                 break;
             }
-
 
         }
 
         var material = new THREE.MeshBasicMaterial({color: data.color});
         var obj = new THREE.Mesh(geometry, material);
         obj.name = data.name;
-        obj.position.set(data.x, data.y, -30);
+        obj.position.set(data.x, 0, data.z);
         engine.scene.add(obj);
 
     };
