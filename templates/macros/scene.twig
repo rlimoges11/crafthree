@@ -1,14 +1,22 @@
-{% macro print(scene) %}
-    {
-    {% for block in scene %}
-        {% if block.type == "sphere" %}
-            "sphere{{ block.id }}":{
-            "type": "{{ block.type }}",
-            "radius": "{{ block.radius }}",
-            "color": "{{ block.color }}"
-            },
+{% macro printArray(scene) %}
+    <script>
+        var json = [];
+        {% for block in scene %}
+        var data = [];
 
+        {% if block.type == "sphere" %}
+        data["name"] = "{{ block.type }}-{{ block.id }}";
+        data["type"] = "{{ block.type }}";
+        data["id"] = "{{ block.id }}";
+        data["color"] = "{{ block.color.hex }}";
+        data["radius"] = {{ block.radius }};
+        data["x"] = {{ block.posX }};
+        data["y"] = {{ block.posY }};
         {% endif %}
-    {% endfor %}
-    }
+
+
+        json.push(data);
+
+        {% endfor %}
+    </script>
 {% endmacro %}

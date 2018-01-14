@@ -7,12 +7,12 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    <div id="json">{% spaceless %}{% block scene %}{% endblock %}{% endspaceless %}</div>
-    {% block scripts %}
-        <script src="/js/vendors/threejs/three.min.js"></script>
-        <script src="/js/vendors/threejs/stats.min.js"></script>
-        <script src="/js/vendors/threejs/Detector.js"></script>
-        <script src="/js/views/viewers/main.js"></script>
-    {% endblock %}
+{% block scene %}{% endblock %}
+{% block scripts %}
+    <script src="/js/vendors/threejs/three.min.js"></script>
+    <script src="/js/vendors/threejs/stats.min.js"></script>
+    <script src="/js/vendors/threejs/Detector.js"></script>
+    <script src="/js/views/viewers/main.js"></script>
+{% endblock %}
 </body>
 </html>

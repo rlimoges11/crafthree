@@ -4,11 +4,11 @@ var engine = function () {
     var engine = this;
 
     engine.init = function () {
-        engine.json = document.getElementById("json").innerHTML;
+        engine.json = json;
         engine.meshes = [];
         engine.models = [];
 
-        console.log(json);
+
         engine.container = document.createElement('div');
         document.body.appendChild(engine.container);
 
@@ -77,6 +77,11 @@ var engine = function () {
         engine.paintGrid(p2, p1, 4);
         engine.paintGrid(p2, p2, 1);
 
+
+        for (var i = 0, len = engine.json.length; i < len; i++) {
+            engine.addObj(i);
+        }
+
         engine.renderer = new THREE.WebGLRenderer({antialias: true});
         engine.renderer.setPixelRatio(window.devicePixelRatio);
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -107,6 +112,27 @@ var engine = function () {
         // engine.controls.update(delta);
         engine.stats.update();
         engine.renderer.render(engine.scene, engine.camera);
+    };
+
+    engine.addObj = function (idx) {
+        var data = engine.json[idx];
+        console.log("Add:", data);
+
+        switch (data.type) {
+            case "sphere": {
+                var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
+                break;
+            }
+
+
+        }
+
+        var material = new THREE.MeshBasicMaterial({color: data.color});
+        var obj = new THREE.Mesh(geometry, material);
+        obj.name = data.name;
+        obj.position.set(data.x, data.y, -30);
+        engine.scene.add(obj);
+
     };
 
 
