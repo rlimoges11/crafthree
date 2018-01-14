@@ -2,18 +2,27 @@
     <script>
         var json = [];
         {% for block in scene %}
-        var data = [];
+            var data = [];
 
-        {% if block.type == "planet" %}
-        data["name"] = "{{ block.type }}-{{ block.id }}";
-        data["type"] = "{{ block.type }}";
-        data["id"] = "{{ block.id }}";
-        data["color"] = "{{ block.color.hex }}";
-        data["radius"] = {{ block.radius }};
-        data["x"] = {{ block.posX }};
-        data["z"] = {{ block.posZ }};
-        {% endif %}
+            {% if block.type == "star" %}
+                data["name"] = "{{ block.type }}-{{ block.id }}";
+                data["type"] = "{{ block.type }}";
+                data["id"] = "{{ block.id }}";
+                data["color"] = "{{ block.color.hex }}";
+                data["radius"] = {{ block.radius }};
+                data["x"] = 0;
+                data["z"] = 0;
 
+            {% elseif block.type == "planet" %}
+                data["name"] = "{{ block.type }}-{{ block.id }}";
+                data["type"] = "{{ block.type }}";
+                data["id"] = "{{ block.id }}";
+                data["color"] = "{{ block.color.hex }}";
+                data["radius"] = {{ block.radius }};
+                data["x"] = {{ block.posX }};
+                data["z"] = {{ block.posZ }};
+
+            {% endif %}
 
         json.push(data);
 

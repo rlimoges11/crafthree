@@ -110,7 +110,7 @@ var engine = function () {
         engine.pLight.position.z = engine.camera.position.z;
         engine.pLight.position.x = engine.camera.position.x;
         engine.pLight.lookAt(engine.scene.position);
-        engine.controls.update(delta);
+        // engine.controls.update(delta);
         engine.stats.update();
         engine.renderer.render(engine.scene, engine.camera);
     };
@@ -121,6 +121,11 @@ var engine = function () {
 
         switch (data.type) {
             case "planet": {
+                var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
+                break;
+            }
+
+            case "star": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
                 break;
             }
