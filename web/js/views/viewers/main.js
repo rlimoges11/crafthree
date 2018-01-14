@@ -32,16 +32,13 @@ var engine = function () {
         engine.scene.add(engine.pLight);
 
         engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-        engine.camera.position.x = 0;
-        engine.camera.position.z = 500;
-        engine.camera.position.y = 10;
 
-        // engine.controls = new THREE.JetpackControls(engine.camera);
-        // engine.controls.movementSpeed = 150;
-        // engine.controls.domElement = engine.container;
-        // engine.controls.rollSpeed = Math.PI / 240;
-        // engine.controls.autoForward = false;
-        // engine.controls.dragToLook = false;
+        engine.controls = new THREE.systemControls(engine.camera);
+        engine.controls.movementSpeed = 150;
+        engine.controls.domElement = engine.container;
+        engine.controls.rollSpeed = Math.PI / 240;
+        engine.controls.autoForward = false;
+        engine.controls.dragToLook = false;
 
         engine.gridSize = 2000;
         engine.gridSegments = 50;
@@ -53,7 +50,6 @@ var engine = function () {
 
         engine.grid.name = "Grid";
         engine.scene.add(engine.grid);
-
 
         var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, engine.gridSegments, engine.gridSegments);
         var material = [
@@ -110,7 +106,8 @@ var engine = function () {
         engine.pLight.position.z = engine.camera.position.z;
         engine.pLight.position.x = engine.camera.position.x;
         engine.pLight.lookAt(engine.scene.position);
-        // engine.controls.update(delta);
+        engine.controls.update(delta);
+        engine.stats.update();
         engine.stats.update();
         engine.renderer.render(engine.scene, engine.camera);
     };
@@ -139,7 +136,6 @@ var engine = function () {
         engine.scene.add(obj);
 
     };
-
 
     window.addEventListener('resize', onWindowResize, false);
 
