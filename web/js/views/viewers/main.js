@@ -31,7 +31,7 @@ var engine = function () {
         engine.pLight.name = "Camera light";
         engine.scene.add(engine.pLight);
 
-        engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+        engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 7000);
 
         engine.controls = new THREE.systemControls(engine.camera);
         engine.controls.movementSpeed = 150;
@@ -40,11 +40,11 @@ var engine = function () {
         engine.controls.autoForward = false;
         engine.controls.dragToLook = false;
 
-        engine.gridSize = 2000;
+        engine.gridSize = 5000;
         engine.gridSegments = 50;
 
         engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments);
-        engine.grid.opacity = 0.05;
+        engine.grid.opacity = 0.1;
         engine.grid.transparent = true;
         engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
 
@@ -53,12 +53,12 @@ var engine = function () {
 
         var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, engine.gridSegments, engine.gridSegments);
         var material = [
-            new THREE.MeshLambertMaterial({color: 0xDDDDDD, side: THREE.DoubleSide, opacity: 0.3, transparent: true}),
-            new THREE.MeshLambertMaterial({color: 0xAAAA00, side: THREE.DoubleSide, opacity: 0.3, transparent: true}),
-            new THREE.MeshLambertMaterial({color: 0x000099, side: THREE.DoubleSide, opacity: 0.3, transparent: true}),
-            new THREE.MeshLambertMaterial({color: 0x111111, side: THREE.DoubleSide, opacity: 0.3, transparent: true}),
-            new THREE.MeshLambertMaterial({color: 0x990000, side: THREE.DoubleSide, opacity: 0.3, transparent: true}),
-            new THREE.MeshLambertMaterial({color: 0x009900, side: THREE.DoubleSide, opacity: 0.3, transparent: true})];
+            new THREE.MeshLambertMaterial({color: 0xDDDDDD, side: THREE.DoubleSide, opacity: 0.1, transparent: true}),
+            new THREE.MeshLambertMaterial({color: 0xAAAA00, side: THREE.DoubleSide, opacity: 0.1, transparent: true}),
+            new THREE.MeshLambertMaterial({color: 0x000099, side: THREE.DoubleSide, opacity: 0.1, transparent: true}),
+            new THREE.MeshLambertMaterial({color: 0x111111, side: THREE.DoubleSide, opacity: 0.1, transparent: true}),
+            new THREE.MeshLambertMaterial({color: 0x990000, side: THREE.DoubleSide, opacity: 0.1, transparent: true}),
+            new THREE.MeshLambertMaterial({color: 0x009900, side: THREE.DoubleSide, opacity: 0.1, transparent: true})];
 
         engine.floor = new THREE.Mesh(geometry, material);
         engine.floor.rotateX(3.1415 / 2);
@@ -82,7 +82,7 @@ var engine = function () {
         engine.renderer = new THREE.WebGLRenderer({antialias: true});
         engine.renderer.setPixelRatio(window.devicePixelRatio);
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
-        engine.renderer.setClearColor(0xCCCCCC);
+        engine.renderer.setClearColor(0x000000);
         engine.renderer.shadowMap.Enabled = true;
         engine.renderer.shadowMap.Type = THREE.PCFSoftShadowMap;
 
@@ -108,7 +108,6 @@ var engine = function () {
         engine.pLight.lookAt(engine.scene.position);
         engine.controls.update(delta);
         engine.stats.update();
-        engine.stats.update();
         engine.renderer.render(engine.scene, engine.camera);
     };
 
@@ -119,21 +118,23 @@ var engine = function () {
         switch (data.type) {
             case "planet": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
+                var material = new THREE.MeshBasicMaterial({color: data.color});
+                var obj = new THREE.Mesh(geometry, material);
+                obj.name = data.name;
+                obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
+                engine.scene.add(obj);
                 break;
             }
-
             case "star": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
+                var material = new THREE.MeshBasicMaterial({color: data.color});
+                var obj = new THREE.Mesh(geometry, material);
+                obj.name = data.name;
+                obj.position.set(0, 0, 0);
+                engine.scene.add(obj);
                 break;
             }
-
         }
-
-        var material = new THREE.MeshBasicMaterial({color: data.color});
-        var obj = new THREE.Mesh(geometry, material);
-        obj.name = data.name;
-        obj.position.set(data.x, 0, data.z);
-        engine.scene.add(obj);
 
     };
 

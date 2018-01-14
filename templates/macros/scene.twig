@@ -10,8 +10,6 @@
                 data["id"] = "{{ block.id }}";
                 data["color"] = "{{ block.color.hex }}";
                 data["radius"] = {{ block.radius }};
-                data["x"] = 0;
-                data["z"] = 0;
 
             {% elseif block.type == "planet" %}
                 data["name"] = "{{ block.type }}-{{ block.id }}";
@@ -19,8 +17,7 @@
                 data["id"] = "{{ block.id }}";
                 data["color"] = "{{ block.color.hex }}";
                 data["radius"] = {{ block.radius }};
-                data["x"] = {{ block.posX }};
-                data["z"] = {{ block.posZ }};
+                data["orbitalDistance"] = {{ block.orbitalDistance}};
 
             {% endif %}
 
