@@ -9,11 +9,34 @@
 <body>
 {% block scene %}{% endblock %}
 {% block scripts %}
+    <script id="vertexShader" type="x-shader/x-vertex">
+			varying vec2 vUv;
+			void main()	{
+				vUv = uv;
+				gl_Position = vec4( position, 1.0 );
+			}
+    </script>
+
+    <script id="fragmentShader" type="x-shader/x-fragment">
+			varying vec2 vUv;
+			uniform float time;
+			float r, g, b;
+			vec4 c;
+			void main()	{
+				vec2 p = - 1.0 + 2.0 * vUv;
+				r = p.x;
+				g = 0.0;
+				b = p.y;
+				gl_FragColor = vec4(r, g, b, 0.0);
+			}
+    </script>
+
     <script src="/js/vendors/threejs/three.min.js"></script>
     <script src="/js/vendors/threejs/stats.min.js"></script>
     <script src="/js/vendors/threejs/Detector.js"></script>
     <script src="/js/vendors/threejs/systemControls.js"></script>
     <script src="/js/views/viewers/main.js"></script>
+
 {% endblock %}
 </body>
 </html>
