@@ -15,6 +15,7 @@
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
+
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
 			varying vec2 vUv;
@@ -23,11 +24,12 @@
 			vec4 c;
 			void main()	{
 				vec2 p = - 1.0 + 2.0 * vUv;
-				r = p.x * 1000.0;
+				r = p.x / 2.0 + 0.5;
 				g = 0.0;
-				b = p.y * 1000.0;
-				gl_FragColor = vec4(r, g, b, 0.0);
+				b = p.y / 2.0 + 0.5;
+				gl_FragColor = vec4(r, g, b, 0.5);
 			}
+
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
     <script src="/js/vendors/threejs/stats.min.js"></script>
