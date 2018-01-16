@@ -85,7 +85,7 @@ var engine = function () {
     // Animation loop;
     engine.animate = function () {
         requestAnimationFrame(engine.animate);
-        var timer = Date.now() * -0.001;
+        var timer = Date.now() * -0.00015;
         var delta = engine.clock.getDelta();
         engine.uniforms.time = timer;
 
