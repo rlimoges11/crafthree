@@ -37,19 +37,21 @@ var engine = function () {
         }
 
         // Grid
-        engine.gridSize = 3000;
+        engine.gridSize = 10000;
         engine.gridSegments = 100;
         engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
         engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
         engine.grid.name = "Grid";
+        engine.grid.position.set(0, -75, 0);
         engine.scene.add(engine.grid);
 
         // Shaders
         engine.uniforms = {
             time: {value: 1.0},
-            d: {value: 100.0}
+            d: {value: 100.0},
+            starColor: {value: engine.star.color }
         };
-        var geometry = new THREE.PlaneGeometry(3000, 3000, 1);
+        var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 1);
         var material = new THREE.ShaderMaterial({
             uniforms: engine.uniforms,
             vertexShader: document.getElementById('vertexShader').textContent,
@@ -58,7 +60,7 @@ var engine = function () {
 
         var mesh = new THREE.Mesh(geometry, material);
         mesh.rotateX(0 - Math.PI / 2);
-        // mesh.position.set(0, -75, 0);
+        mesh.position.set(0, -75, 0);
         mesh.name = "gridPlane";
         material.opacity = 0.5;
         material.transparent = true;
@@ -122,6 +124,7 @@ var engine = function () {
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 obj.position.set(0, 0, 0);
+                engine.star = obj;
                 engine.scene.add(obj);
                 break;
             }
