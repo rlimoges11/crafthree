@@ -50,19 +50,19 @@ var engine = function () {
             d: {value: 100.0}
         };
         var geometry = new THREE.PlaneGeometry(2000, 2000, 1);
-        var material = new THREE.MeshBasicMaterial({color: 0x333333});
+        // var material = new THREE.MeshBasicMaterial({color: 0x333333});
 
-        // var material = new THREE.ShaderMaterial({
-        //     uniforms: engine.uniforms,
-        //     vertexShader: document.getElementById('vertexShader').textContent,
-        //     fragmentShader: document.getElementById('fragmentShader').textContent
-        // });
+        var material = new THREE.ShaderMaterial({
+            uniforms: engine.uniforms,
+            vertexShader: document.getElementById('vertexShader').textContent,
+            fragmentShader: document.getElementById('fragmentShader').textContent
+        });
 
         var mesh = new THREE.Mesh(geometry, material);
         mesh.rotateX(0 - Math.PI / 2);
         mesh.name = "gridPlane";
-        material.opacity = 0.5;
-        material.transparent = true;
+        // material.opacity = 0.5;
+        // material.transparent = true;
         material.side = THREE.DoubleSide;
         engine.scene.add(mesh);
 
