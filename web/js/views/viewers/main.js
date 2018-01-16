@@ -8,6 +8,7 @@ var engine = function () {
         engine.json = json;
         engine.meshes = [];
         engine.models = [];
+        engine.planets = [];
         engine.clock = new THREE.Clock();
         engine.scene = new THREE.Scene();
 
@@ -37,7 +38,7 @@ var engine = function () {
 
         // Grid
         engine.gridSize = 2000;
-        engine.gridSegments = 50;
+        engine.gridSegments = 100;
         engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0xFFFFFF, 0xFFFF00);
         engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
         engine.grid.name = "Grid";
@@ -56,6 +57,7 @@ var engine = function () {
         //     vertexShader: document.getElementById('vertexShader').textContent,
         //     fragmentShader: document.getElementById('fragmentShader').textContent
         // });
+
         var mesh = new THREE.Mesh(geometry, material);
         mesh.rotateX(0 - Math.PI / 2);
         engine.scene.add(mesh);
@@ -79,9 +81,17 @@ var engine = function () {
     // Animation loop;
     engine.animate = function () {
         requestAnimationFrame(engine.animate);
-        var timer = Date.now() * 0.0001;
+        var timer = Date.now() * -0.001;
         var delta = engine.clock.getDelta();
         engine.uniforms.time = timer;
+
+        // Orbits
+        for (var i = 0; i < engine.planets.length; i++) {
+            var x = Math.sin((i + engine.planets[i].orbitalVelocity / 100) * timer) * engine.planets[i].orbitalDistance;
+            var z = Math.cos((i + engine.planets[i].orbitalVelocity / 100) * timer) * engine.planets[i].orbitalDistance;
+            engine.planets[i].position.set(x, 0, z);
+        }
+
         engine.controls.update(delta);
         engine.stats.update();
         engine.renderer.render(engine.scene, engine.camera);
@@ -97,7 +107,10 @@ var engine = function () {
                 var material = new THREE.MeshBasicMaterial({color: data.color});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
+                obj.orbitalDistance = data.orbitalDistance;
+                obj.orbitalVelocity = data.orbitalVelocity;
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
+                engine.planets.push(obj);
                 engine.scene.add(obj);
                 break;
             }
