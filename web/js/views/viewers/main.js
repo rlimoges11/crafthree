@@ -60,6 +60,10 @@ var engine = function () {
 
         var mesh = new THREE.Mesh(geometry, material);
         mesh.rotateX(0 - Math.PI / 2);
+        mesh.name = "gridPlane";
+        material.opacity = 0.5;
+        material.transparent = true;
+        material.side = THREE.DoubleSide;
         engine.scene.add(mesh);
 
         // Append Renderer
