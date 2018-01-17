@@ -9,14 +9,14 @@ var engine = function () {
         engine.meshes = [];
         engine.models = [];
         engine.planets = [];
+        engine.orbitalDistances = [];
         engine.clock = new THREE.Clock();
         engine.scene = new THREE.Scene();
 
         // Settings
-        engine.grid = false;
+        engine.gridVisible = false;
         engine.gridSize = 10000;
-        engine.gridSegments = 100;
-
+        engine.gridSegments = 200;
 
         // Append container to Dom
         engine.container = document.createElement('div');
@@ -43,17 +43,17 @@ var engine = function () {
         }
 
         // Grid
-        if (engine.grid) {
-            engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
-            engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
-            engine.grid.name = "Grid";
-            engine.scene.add(engine.grid);
-        }
+        engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
+        engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
+        engine.grid.name = "Grid";
+        engine.grid.visible = engine.gridVisible;
+        engine.scene.add(engine.grid);
 
         // Shaders
         engine.uniforms = {
             time: {value: 1.0},
             d: {value: 100.0},
+            orbitalDistances: {value: engine.orbitalDistances},
             starColor: {value: engine.star.material.color}
         };
         var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 1);
@@ -131,6 +131,7 @@ var engine = function () {
                 obj.position.set(0, 0, 0);
                 engine.star = obj;
                 engine.scene.add(obj);
+                engine.orbitalDistances.push(data.orbitalDistance);
                 break;
             }
         }

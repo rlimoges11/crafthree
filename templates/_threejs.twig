@@ -25,6 +25,7 @@
 			float r, g, b, d;
 			vec4 c;
 			uniform vec3 starColor;
+			uniform float orbitalDistances[9];
 
 			void main()	{
 				vec2 p = -1.0 + 2.0 * vUv;
@@ -42,9 +43,6 @@
                 if (b < 0.072) b = 0.072;
 				gl_FragColor = vec4(r, g, b, 0.5);
 			}
-
-
-
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
     <script src="/js/vendors/threejs/stats.min.js"></script>
