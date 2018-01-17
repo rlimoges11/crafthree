@@ -27,7 +27,7 @@ var engine = function () {
         engine.scene.children[0].name = "Ambient light";
 
         // Camera
-        engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 7000);
+        engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
 
         // Setup controls
         engine.controls = new THREE.systemControls(engine.camera);
@@ -49,28 +49,26 @@ var engine = function () {
         engine.grid.visible = engine.gridVisible;
         engine.scene.add(engine.grid);
 
-        // Shaders
+        // Shader constants
         engine.uniforms = {
-            time: {value: 1.0},
-            d: {value: 100.0},
             orbitalDistances: {value: engine.orbitalDistances},
             starColor: {value: engine.star.material.color}
         };
+
+        // ShaderMesh
         var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 1);
         var material = new THREE.ShaderMaterial({
             uniforms: engine.uniforms,
             vertexShader: document.getElementById('vertexShader').textContent,
-            fragmentShader: document.getElementById('fragmentShader').textContent
+            fragmentShader: document.getElementById('fragmentShader').textContent,
+            opacity: 0.25,
+            transparent: true,
+            side: THREE.DoubleSide
         });
-
-        var mesh = new THREE.Mesh(geometry, material);
-        mesh.rotateX(0 - Math.PI / 2);
-        mesh.position.set(0, 0, 0);
-        mesh.name = "gridPlane";
-        material.opacity = 0.25;
-        material.transparent = true;
-        material.side = THREE.DoubleSide;
-        engine.scene.add(mesh);
+        engine.shaderMesh = new THREE.Mesh(geometry, material);
+        engine.shaderMesh.rotateX(0 - Math.PI / 2);
+        engine.shaderMesh.name = "shaderMesh";
+        engine.scene.add(engine.shaderMesh);
 
         // Append Renderer
         engine.renderer = new THREE.WebGLRenderer({antialias: true});
@@ -90,14 +88,14 @@ var engine = function () {
     // Animation loop;
     engine.animate = function () {
         requestAnimationFrame(engine.animate);
-        var timer = Date.now() * -0.00015;
+        var timer = Date.now() * 0.00015;
         var delta = engine.clock.getDelta();
         engine.uniforms.time = timer;
 
         // Orbits
         for (var i = 0; i < engine.planets.length; i++) {
-            var x = Math.sin((i + engine.planets[i].orbitalVelocity / 100) * timer) * engine.planets[i].orbitalDistance;
-            var z = Math.cos((i + engine.planets[i].orbitalVelocity / 100) * timer) * engine.planets[i].orbitalDistance;
+            var x = Math.sin((i + engine.planets[i].orbitalVelocity / 100) * -timer) * engine.planets[i].orbitalDistance;
+            var z = Math.cos((i + engine.planets[i].orbitalVelocity / 100) * -timer) * engine.planets[i].orbitalDistance;
             engine.planets[i].position.set(x, 0, z);
         }
 
@@ -108,7 +106,7 @@ var engine = function () {
 
     engine.addObj = function (idx) {
         var data = engine.json[idx];
-        console.log("Add:", data);
+        // console.log("Add:", data);
 
         switch (data.type) {
             case "planet": {
@@ -120,6 +118,7 @@ var engine = function () {
                 obj.orbitalVelocity = data.orbitalVelocity;
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 engine.planets.push(obj);
+                engine.orbitalDistances.push(obj.orbitalDistance);
                 engine.scene.add(obj);
                 break;
             }

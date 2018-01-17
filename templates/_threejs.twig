@@ -17,7 +17,6 @@
         }
 
 
-
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
 			varying vec2 vUv;
@@ -35,6 +34,11 @@
 				g = starColor[1] - d;
 				b = 0.5 - starColor[2] - ((d/20.0)*2.0)/3.0;
 
+                for(int i=1;i<9;i++){
+                    if(d*310.0 + 5.0 > orbitalDistances[i] && d*310.0 - 5.0 < orbitalDistances[i]){
+                        g = 1.0;
+                    }
+                }
                 {#float l = mod(p.x, 10.0) < 10.0 ? 1.0 : 0.0;#}
                 {#r= r + l;#}
                 {#g= g + l;#}
@@ -43,6 +47,8 @@
                 if (b < 0.072) b = 0.072;
 				gl_FragColor = vec4(r, g, b, 0.5);
 			}
+
+
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
     <script src="/js/vendors/threejs/stats.min.js"></script>
