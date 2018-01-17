@@ -9,7 +9,8 @@ var engine = function () {
         engine.meshes = [];
         engine.models = [];
         engine.planets = [];
-        engine.orbitalDistances = [];
+        engine.planetOrbitalDistances = [];
+        engine.planetColors = [];
         engine.clock = new THREE.Clock();
         engine.scene = new THREE.Scene();
 
@@ -50,8 +51,10 @@ var engine = function () {
         engine.scene.add(engine.grid);
 
         // Shader constants
+
         engine.uniforms = {
-            orbitalDistances: {value: engine.orbitalDistances},
+            planetOrbitalDistances: {value: engine.planetOrbitalDistances},
+            planetColors: {value: engine.planetColors},
             starColor: {value: engine.star.material.color}
         };
 
@@ -118,19 +121,21 @@ var engine = function () {
                 obj.orbitalVelocity = data.orbitalVelocity;
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 engine.planets.push(obj);
-                engine.orbitalDistances.push(obj.orbitalDistance);
+                engine.planetOrbitalDistances.push(obj.orbitalDistance);
+                engine.planetColors.push(material.color);
                 engine.scene.add(obj);
                 break;
             }
             case "star": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color});
+                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 obj.position.set(0, 0, 0);
+
                 engine.star = obj;
                 engine.scene.add(obj);
-                engine.orbitalDistances.push(data.orbitalDistance);
+                engine.planetOrbitalDistances.push(data.orbitalDistance);
                 break;
             }
         }

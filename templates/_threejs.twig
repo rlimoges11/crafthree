@@ -24,7 +24,8 @@
 			float r, g, b, d;
 			vec4 c;
 			uniform vec3 starColor;
-			uniform float orbitalDistances[9];
+			uniform float planetOrbitalDistances[9];
+			uniform vec3 planetColors;
 
 			void main()	{
 				vec2 p = -1.0 + 2.0 * vUv;
@@ -35,7 +36,7 @@
 				b = 0.5 - starColor[2] - ((d/20.0)*2.0)/3.0;
 
                 for(int i=1;i<9;i++){
-                    if(d*310.0 + 5.0 > orbitalDistances[i] && d*310.0 - 5.0 < orbitalDistances[i]){
+                    if(d*310.0 + 5.0 > planetOrbitalDistances[i] && d*310.0 - 5.0 < planetOrbitalDistances[i]){
                         g = 1.0;
                     }
                 }
