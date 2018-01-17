@@ -4,13 +4,19 @@ var engine = function () {
     var engine = this;
 
     engine.init = function () {
-        // Initialize engine
+        // Initialize engine globals
         engine.json = json;
         engine.meshes = [];
         engine.models = [];
         engine.planets = [];
         engine.clock = new THREE.Clock();
         engine.scene = new THREE.Scene();
+
+        // Settings
+        engine.grid = false;
+        engine.gridSize = 10000;
+        engine.gridSegments = 100;
+
 
         // Append container to Dom
         engine.container = document.createElement('div');
@@ -36,21 +42,19 @@ var engine = function () {
             engine.addObj(i);
         }
 
-        engine.gridSize = 10000;
-        engine.gridSegments = 100;
-
         // Grid
-        // engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
-        // engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
-        // engine.grid.name = "Grid";
-        // engine.grid.position.set(0, -75, 0);
-        // engine.scene.add(engine.grid);
+        if (engine.grid) {
+            engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
+            engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
+            engine.grid.name = "Grid";
+            engine.scene.add(engine.grid);
+        }
 
         // Shaders
         engine.uniforms = {
             time: {value: 1.0},
             d: {value: 100.0},
-            starColor: {value: engine.star.material.color }
+            starColor: {value: engine.star.material.color}
         };
         var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 1);
         var material = new THREE.ShaderMaterial({
@@ -72,7 +76,7 @@ var engine = function () {
         engine.renderer = new THREE.WebGLRenderer({antialias: true});
         engine.renderer.setPixelRatio(window.devicePixelRatio);
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
-        engine.renderer.setClearColor(0x000033);
+        engine.renderer.setClearColor(0x000011);
         engine.renderer.shadowMap.Enabled = true;
         engine.renderer.shadowMap.Type = THREE.PCFSoftShadowMap;
         engine.container.appendChild(engine.renderer.domElement);
