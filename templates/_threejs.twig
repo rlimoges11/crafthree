@@ -15,21 +15,33 @@
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
+
+
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
 			varying vec2 vUv;
 			uniform float time;
-
 			float r, g, b, d;
 			vec4 c;
+			uniform vec3 starColor;
+
 			void main()	{
 				vec2 p = - 1.0 + 2.0 * vUv;
-				d = sqrt(((p.x*p.x) + (p.y*p.y))) *4.0;
-				r = 1.0-d;
-				g = r ;
-				b = d / 10.0 ;
-				gl_FragColor = vec4(r, g, b, 0.5);
+				d = sqrt(((p.x*p.x) + (p.y*p.y))) *8.0;
+
+				r = starColor[0]-d;
+				g = starColor[1]-d;
+				b = starColor[2]-d;
+
+                float l = mod(time + p.x, 20.0) < 10.0 ? 1.0 : 0.0;
+                r= r + l;
+                g= g + l;
+                b= b + l;
+
+				gl_FragColor = vec4(r, g, b, 0.4);
 			}
+
+
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
     <script src="/js/vendors/threejs/stats.min.js"></script>

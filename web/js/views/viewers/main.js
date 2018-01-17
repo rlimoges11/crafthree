@@ -36,20 +36,21 @@ var engine = function () {
             engine.addObj(i);
         }
 
-        // Grid
         engine.gridSize = 10000;
         engine.gridSegments = 100;
-        engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
-        engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
-        engine.grid.name = "Grid";
-        engine.grid.position.set(0, -75, 0);
-        engine.scene.add(engine.grid);
+
+        // Grid
+        // engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
+        // engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
+        // engine.grid.name = "Grid";
+        // engine.grid.position.set(0, -75, 0);
+        // engine.scene.add(engine.grid);
 
         // Shaders
         engine.uniforms = {
             time: {value: 1.0},
             d: {value: 100.0},
-            starColor: {value: engine.star.color }
+            starColor: {value: engine.star.material.color }
         };
         var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 1);
         var material = new THREE.ShaderMaterial({
@@ -60,9 +61,9 @@ var engine = function () {
 
         var mesh = new THREE.Mesh(geometry, material);
         mesh.rotateX(0 - Math.PI / 2);
-        mesh.position.set(0, -75, 0);
+        mesh.position.set(0, 0, 0);
         mesh.name = "gridPlane";
-        material.opacity = 0.5;
+        material.opacity = 0.25;
         material.transparent = true;
         material.side = THREE.DoubleSide;
         engine.scene.add(mesh);
@@ -71,7 +72,7 @@ var engine = function () {
         engine.renderer = new THREE.WebGLRenderer({antialias: true});
         engine.renderer.setPixelRatio(window.devicePixelRatio);
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
-        engine.renderer.setClearColor(0x000000);
+        engine.renderer.setClearColor(0x000033);
         engine.renderer.shadowMap.Enabled = true;
         engine.renderer.shadowMap.Type = THREE.PCFSoftShadowMap;
         engine.container.appendChild(engine.renderer.domElement);
