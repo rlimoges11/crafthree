@@ -20,34 +20,33 @@
 			varying vec2 vUv;
 			uniform float timer;
 			float r, g, b, a, d;
-			vec4 c;
 			uniform vec3 starColor;
 			uniform float planetOrbitalDistances[9];
-			{#uniform vec3 planetColors[9];#}
 			uniform float planetColorsR[9], planetColorsG[9], planetColorsB[9];
 
 			void main()	{
 				vec2 p = -1.0 + 2.0 * vUv;
 				d = sqrt(((p.x*p.x) + (p.y*p.y)))*16.0;
 
+                {# bg #}
 				r = starColor[0] - d;
 				g = starColor[1] - d;
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
-				a = 0.5;
+				a = 0.8;
 
-
-
-                {#float l = (sin(p.x) > sin(p.y) ) ? 1.0 : 0.0;#}
+                {# Grid #}
                 if((sin(p.x*250.) > 0. && sin(p.x*250.) < 0.1) || (sin(p.y*250.) > 0. && sin(p.y*250.) < 0.1)){
                     r= 1.0 / d - 0.1;
                     g= r;
                 }
 
+                {# Orbits #}
                 for(int i=0;i<9;i++){
-                    if(d*310.0 + 5.0 > planetOrbitalDistances[i] && d*310.0 - 5.0 < planetOrbitalDistances[i]){
+                    if(d*310.0 + 2.0 > planetOrbitalDistances[i] && d*310.0 - 2.0 < planetOrbitalDistances[i]){
                         r= planetColorsR[i];
                         g= planetColorsG[i];
                         b= planetColorsB[i];
+                        a = 1.;
                     }
                 }
 

@@ -46,11 +46,11 @@ var engine = function () {
         }
 
         // Grid
-        engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
-        engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
-        engine.grid.name = "Grid";
-        engine.grid.visible = engine.gridVisible;
-        engine.scene.add(engine.grid);
+        // engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
+        // engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
+        // engine.grid.name = "Grid";
+        // engine.grid.visible = engine.gridVisible;
+        // engine.scene.add(engine.grid);
 
         // Shader constants
         engine.uniforms = {
@@ -76,6 +76,7 @@ var engine = function () {
         engine.shaderMesh = new THREE.Mesh(geometry, material);
         engine.shaderMesh.rotateX(0 - Math.PI / 2);
         engine.shaderMesh.name = "shaderMesh";
+        // engine.shaderMesh.position.set(0, -100, 0);
         engine.scene.add(engine.shaderMesh);
 
         // Append Renderer
