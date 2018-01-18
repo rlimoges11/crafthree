@@ -28,16 +28,22 @@
 				vec2 p = -1.0 + 2.0 * vUv;
 				d = sqrt(((p.x*p.x) + (p.y*p.y)))*16.0;
 
-                {# bg #}
+                {# Solar glow #}
 				r = starColor[0] - d;
 				g = starColor[1] - d;
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
 				a = 0.8;
 
-                {# Grid #}
-                if((sin(p.x*250.) > 0. && sin(p.x*250.) < 0.1) || (sin(p.y*250.) > 0. && sin(p.y*250.) < 0.1)){
-                    r= 1.0 / d - 0.1;
-                    g= r;
+                {# Grid Bold #}
+                if((sin(p.x*50.) > 0. && sin(p.x*50.) < 0.05) || (sin(p.y*50.) > 0. && sin(p.y*50.) < 0.05)){
+                    r = starColor[0] - (d / 5.);
+                    g = starColor[1] - (d / 5.);
+                    b = starColor[2] - (d / 5.);
+                }
+                if((sin(p.x*500.) > 0. && sin(p.x*500.) < 0.05) || (sin(p.y*500.) > 0. && sin(p.y*500.) < 0.05)){
+                    r = starColor[0] - (d / 5.);
+                    g = starColor[1] - (d / 5.);
+                    b = starColor[2] - (d / 5.);
                 }
 
                 {# Orbits #}
@@ -46,7 +52,7 @@
                         r= planetColorsR[i];
                         g= planetColorsG[i];
                         b= planetColorsB[i];
-                        a = 1.;
+                        a = 0.9;
                     }
                 }
 
