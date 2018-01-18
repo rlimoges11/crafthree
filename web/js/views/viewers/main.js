@@ -10,7 +10,9 @@ var engine = function () {
         engine.models = [];
         engine.planets = [];
         engine.planetOrbitalDistances = [];
-        engine.planetColors = [];
+        engine.planetColorsR = [];
+        engine.planetColorsG = [];
+        engine.planetColorsB = [];
         engine.clock = new THREE.Clock();
         engine.scene = new THREE.Scene();
 
@@ -51,12 +53,14 @@ var engine = function () {
         engine.scene.add(engine.grid);
 
         // Shader constants
-
         engine.uniforms = {
             planetOrbitalDistances: {value: engine.planetOrbitalDistances},
-            planetColors: {value: engine.planetColors},
+            planetColorsR: {value: engine.planetColorsR},
+            planetColorsG: {value: engine.planetColorsG},
+            planetColorsB: {value: engine.planetColorsB},
             starColor: {value: engine.star.material.color}
         };
+        console.log(engine.uniforms);
 
         // ShaderMesh
         var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 1);
@@ -122,7 +126,9 @@ var engine = function () {
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 engine.planets.push(obj);
                 engine.planetOrbitalDistances.push(obj.orbitalDistance);
-                engine.planetColors.push(material.color);
+                engine.planetColorsR.push(material.color.r.toFixed(2));
+                engine.planetColorsG.push(material.color.g.toFixed(2));
+                engine.planetColorsB.push(material.color.b.toFixed(2));
                 engine.scene.add(obj);
                 break;
             }
@@ -131,8 +137,6 @@ var engine = function () {
                 var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
-                obj.position.set(0, 0, 0);
-
                 engine.star = obj;
                 engine.scene.add(obj);
                 engine.planetOrbitalDistances.push(data.orbitalDistance);

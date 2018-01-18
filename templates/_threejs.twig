@@ -15,17 +15,16 @@
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         }
-
-
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
 			varying vec2 vUv;
 			uniform float time;
-			float r, g, b, d;
+			float r, g, b, a, d;
 			vec4 c;
 			uniform vec3 starColor;
 			uniform float planetOrbitalDistances[9];
-			uniform vec3 planetColors;
+			{#uniform vec3 planetColors[9];#}
+			uniform float planetColorsR[9], planetColorsG[9], planetColorsB[9];
 
 			void main()	{
 				vec2 p = -1.0 + 2.0 * vUv;
@@ -33,23 +32,26 @@
 
 				r = starColor[0] - d;
 				g = starColor[1] - d;
-				b = 0.5 - starColor[2] - ((d/20.0)*2.0)/3.0;
+				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
+				a = 0.5;
 
-                for(int i=1;i<9;i++){
+                for(int i=0;i<9;i++){
                     if(d*310.0 + 5.0 > planetOrbitalDistances[i] && d*310.0 - 5.0 < planetOrbitalDistances[i]){
-                        g = 1.0;
+                        r= planetColorsR[i-1];
+                        g= planetColorsG[i-1];
+                        b= planetColorsB[i-1];
+                        a = 0.7;
                     }
                 }
+
                 {#float l = mod(p.x, 10.0) < 10.0 ? 1.0 : 0.0;#}
-                {#r= r + l;#}
-                {#g= g + l;#}
-                {#b= b + l;#}
+                {#r= r + l.0;#}
+                {#g= g + l.0;#}
+                {#b= b + l.0;#}
 
                 if (b < 0.072) b = 0.072;
-				gl_FragColor = vec4(r, g, b, 0.5);
+				gl_FragColor = vec4(r, g, b, a);
 			}
-
-
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
     <script src="/js/vendors/threejs/stats.min.js"></script>
