@@ -6,8 +6,6 @@ var engine = function () {
     engine.init = function () {
         // Initialize engine globals
         engine.json = json;
-        engine.meshes = [];
-        engine.models = [];
         engine.planets = [];
         engine.planetOrbitalDistances = [];
         engine.planetColorsR = [];
@@ -65,7 +63,7 @@ var engine = function () {
         console.log(engine.uniforms);
 
         // ShaderMesh
-        var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 1);
+        var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 100, 100);
         var material = new THREE.ShaderMaterial({
             uniforms: engine.uniforms,
             vertexShader: document.getElementById('vertexShader').textContent,

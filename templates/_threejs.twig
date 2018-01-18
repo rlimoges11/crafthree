@@ -11,9 +11,15 @@
 {% block scripts %}
     <script id="vertexShader" type="x-shader/x-vertex">
         varying vec2 vUv;
-        void main(){
+        varying vec3 vPos;
+
+        void main(void){
             vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+            vec2 p = -1.0 + 2.0 * vUv;
+            float d = sqrt(((p.x*p.x) + (p.y*p.y)));
+            vec3 newPos = position + vec3(0,0,d*1000.0 - 100.0);
+            vPos = newPos;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0 );
         }
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
