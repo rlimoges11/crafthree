@@ -18,7 +18,7 @@
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
 			varying vec2 vUv;
-			uniform float time;
+			uniform float timer;
 			float r, g, b, a, d;
 			vec4 c;
 			uniform vec3 starColor;
@@ -35,19 +35,21 @@
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
 				a = 0.5;
 
-                for(int i=0;i<9;i++){
-                    if(d*310.0 + 5.0 > planetOrbitalDistances[i] && d*310.0 - 5.0 < planetOrbitalDistances[i]){
-                        r= planetColorsR[i-1];
-                        g= planetColorsG[i-1];
-                        b= planetColorsB[i-1];
-                        a = 0.7;
-                    }
+
+
+                {#float l = (sin(p.x) > sin(p.y) ) ? 1.0 : 0.0;#}
+                if((sin(p.x*250.) > 0. && sin(p.x*250.) < 0.1) || (sin(p.y*250.) > 0. && sin(p.y*250.) < 0.1)){
+                    r= 1.0 / d - 0.1;
+                    g= r;
                 }
 
-                {#float l = mod(p.x, 10.0) < 10.0 ? 1.0 : 0.0;#}
-                {#r= r + l.0;#}
-                {#g= g + l.0;#}
-                {#b= b + l.0;#}
+                for(int i=0;i<9;i++){
+                    if(d*310.0 + 5.0 > planetOrbitalDistances[i] && d*310.0 - 5.0 < planetOrbitalDistances[i]){
+                        r= planetColorsR[i];
+                        g= planetColorsG[i];
+                        b= planetColorsB[i];
+                    }
+                }
 
                 if (b < 0.072) b = 0.072;
 				gl_FragColor = vec4(r, g, b, a);

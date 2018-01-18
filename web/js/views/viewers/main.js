@@ -58,7 +58,8 @@ var engine = function () {
             planetColorsR: {value: engine.planetColorsR},
             planetColorsG: {value: engine.planetColorsG},
             planetColorsB: {value: engine.planetColorsB},
-            starColor: {value: engine.star.material.color}
+            starColor: {value: engine.star.material.color},
+            timer: {value: engine.clock.elapsedTime / 10}
         };
         console.log(engine.uniforms);
 
@@ -95,9 +96,8 @@ var engine = function () {
     // Animation loop;
     engine.animate = function () {
         requestAnimationFrame(engine.animate);
-        var timer = Date.now() * 0.00015;
-        var delta = engine.clock.getDelta();
-        engine.uniforms.time = timer;
+        var timer = engine.clock.elapsedTime / 10;
+        engine.shaderMesh.material.uniforms.timer = timer;
 
         // Orbits
         for (var i = 0; i < engine.planets.length; i++) {
@@ -106,14 +106,13 @@ var engine = function () {
             engine.planets[i].position.set(x, 0, z);
         }
 
-        engine.controls.update(delta);
+        engine.controls.update(engine.clock.getDelta());
         engine.stats.update();
         engine.renderer.render(engine.scene, engine.camera);
     };
 
     engine.addObj = function (idx) {
         var data = engine.json[idx];
-        // console.log("Add:", data);
 
         switch (data.type) {
             case "planet": {
@@ -139,7 +138,6 @@ var engine = function () {
                 obj.name = data.name;
                 engine.star = obj;
                 engine.scene.add(obj);
-                engine.planetOrbitalDistances.push(data.orbitalDistance);
                 break;
             }
         }
