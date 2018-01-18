@@ -26,12 +26,12 @@ THREE.systemControls = function (object, domElement) {
     this.target = new THREE.Vector3();
 
     // How far you can dolly in and out ( PerspectiveCamera only )
-    this.minDistance = 500;
-    this.maxDistance = 2500;
+    this.minDistance = 200;
+    this.maxDistance = 5000;
 
     // How far you can zoom in and out ( OrthographicCamera only )
     this.minZoom = 200;
-    this.maxZoom = 2500;
+    this.maxZoom = 5000;
 
     // How far you can orbit vertically, upper and lower limits.
     // Range is 0 to Math.PI radians.
@@ -270,6 +270,8 @@ THREE.systemControls = function (object, domElement) {
     var dollyStart = new THREE.Vector2();
     var dollyEnd = new THREE.Vector2();
     var dollyDelta = new THREE.Vector2();
+
+
 
     function getAutoRotationAngle() {
 

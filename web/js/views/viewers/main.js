@@ -31,6 +31,7 @@ var engine = function () {
 
         // Camera
         engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
+        engine.camera.position.set(1000, 1000, 1000);
 
         // Setup controls
         engine.controls = new THREE.systemControls(engine.camera);
