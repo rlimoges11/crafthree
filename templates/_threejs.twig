@@ -22,7 +22,8 @@
         varying vec2 vUv;
         varying vec3 vPos;
         uniform float timer;
-        uniform float planetPositionsX[9], planetPositionsY[9];
+        uniform float planetPositionsX[9];
+        uniform float planetPositionsY[9];
 
         void main(void){
             vUv = uv;
@@ -34,13 +35,23 @@
 
             {# Orbits #}
             for(int i=0;i<9;i++){
-                float di = sin(sqrt(((p.x*p.x) + (p.y*p.y))));
-                newPos = newPos + vec3(0,0,di);
+                {#float d2 = (sin(planetPositionsX[i] * p.x) + cos(planetPositionsY[i]))*200.0;#}
+                {#float d2 = sin(p.x * timer)*100.0 * sin(sqrt(((planetPositionsX[i]*planetPositionsX[i]) + (planetPositionsY[i]*planetPositionsY[i]))))*10.0;#}
+                {#float d2 = sin(p.x + timer) * cos(p.y + timer) * 100. ;#}
+
+                    float plx = planetPositionsX[i] / 5000.;
+                    float ply = planetPositionsY[i] / 5000.;
+                    float p1 = (plx-p.x);
+                    float p2 = (ply-p.y);
+                    float pld = sqrt(p1*p1+p2*p2) * 20.;
+
+                newPos = newPos + vec3(0,0,pld);
             }
 
             vPos = newPos;
             gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0 );
         }
+
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
 			varying vec2 vUv;
@@ -49,6 +60,7 @@
 			uniform vec3 starColor;
 			uniform float planetOrbitalDistances[9];
 			uniform float planetColorsR[9], planetColorsG[9], planetColorsB[9];
+            uniform float planetPositionsX[9], planetPositionsY[9];
 
 			void main()	{
 				vec2 p = -1.0 + 2.0 * vUv;
@@ -73,19 +85,34 @@
                     b = starColor[2] - (d / 5.);
                 }
 
-                {# Orbits #}
+                {# Planets #}
                 for(int i=0;i<9;i++){
-                    if(d*1260.0 + 2.0 > planetOrbitalDistances[i] && d*1260.0 - 2.0 < planetOrbitalDistances[i]){
+                    {# Orbits #}
+                    if(d*1260. + 2. > planetOrbitalDistances[i] && d*1260. - 2. < planetOrbitalDistances[i]){
                         r= planetColorsR[i];
                         g= planetColorsG[i];
                         b= planetColorsB[i];
                         {#a = 0.9;#}
+                    }
+
+                    {# position #}
+                    float plx = planetPositionsX[i] / 5000.;
+                    float ply = planetPositionsY[i] / 5000.;
+                    float p1 = (plx-p.x);
+                    float p2 = (ply-p.y);
+                    float pld = sqrt(p1*p1+p2*p2) * 20.;
+                    if(pld < 1.0 ){
+                        r= planetColorsR[i];
+                        g= planetColorsG[i];
+                        b= planetColorsB[i];
+                        {#a= r;#}
                     }
                 }
 
                 if (b < 0.072) b = 0.072;
 				gl_FragColor = vec4(r, g, b, a);
 			}
+
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
     <script src="/js/vendors/threejs/stats.min.js"></script>
