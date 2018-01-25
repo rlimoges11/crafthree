@@ -11,6 +11,7 @@ var engine = function () {
         engine.planetColorsR = [];
         engine.planetColorsG = [];
         engine.planetColorsB = [];
+        engine.planetRadii = [];
         engine.planetPositionsX = [];
         engine.planetPositionsY = [];
         engine.clock = new THREE.Clock();
@@ -57,6 +58,7 @@ var engine = function () {
         // Shader constants
         engine.uniforms = {
             planetOrbitalDistances: {type: "f", value: engine.planetOrbitalDistances},
+            planetRadii: {type: "f", value: engine.planetRadii},
             planetColorsR: {value: engine.planetColorsR},
             planetColorsG: {value: engine.planetColorsG},
             planetColorsB: {value: engine.planetColorsB},
@@ -133,12 +135,14 @@ var engine = function () {
                 var obj = new THREE.Mesh(geometry, material);
 
                 obj.name = data.name;
+                obj.radius = data.radius;
                 obj.orbitalDistance = data.orbitalDistance;
                 obj.orbitalVelocity = data.orbitalVelocity;
                 var d = Math.sin(obj.orbitalDistance);
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 engine.planets.push(obj);
                 engine.planetOrbitalDistances.push(obj.orbitalDistance);
+                engine.planetRadii.push(obj.radius);
                 engine.planetColorsR.push(material.color.r.toFixed(2));
                 engine.planetColorsG.push(material.color.g.toFixed(2));
                 engine.planetColorsB.push(material.color.b.toFixed(2));
