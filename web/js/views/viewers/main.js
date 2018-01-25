@@ -14,7 +14,7 @@ var engine = function () {
         engine.planetPositionsX = [];
         engine.planetPositionsY = [];
         engine.clock = new THREE.Clock();
-        engine.timer = engine.clock.elapsedTime / 10;
+        engine.timer = engine.clock.elapsedTime / 50;
         engine.scene = new THREE.Scene();
 
         // Settings
@@ -63,7 +63,7 @@ var engine = function () {
             planetPositionsX: {value: engine.planetPositionsX},
             planetPositionsY: {value: engine.planetPositionsY},
             starColor: {value: engine.star.material.color},
-            timer: {type: "f", value: engine.clock.elapsedTime / 10}
+            timer: {type: "f", value: engine.clock.elapsedTime / 50}
         };
 
         // ShaderMesh
@@ -100,13 +100,13 @@ var engine = function () {
     // Animation loop;
     engine.animate = function () {
         requestAnimationFrame(engine.animate);
-        engine.timer = engine.clock.elapsedTime / 10;
+        engine.timer = engine.clock.elapsedTime / 50;
         engine.shaderMesh.material.uniforms.timer.value = engine.timer;
 
         // Orbits
         for (var i = 0; i < engine.planets.length; i++) {
-            var x = Math.sin((i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
-            var z = Math.cos((i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
+            var x = Math.sin(i+(i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
+            var z = Math.cos(i+(i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
             engine.planets[i].position.set(x, 0, z);
             engine.planetPositionsX[i] = x;
             engine.planetPositionsY[i] = 0-z;
