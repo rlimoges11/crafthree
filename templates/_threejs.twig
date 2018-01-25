@@ -68,7 +68,7 @@
 				r = starColor[0] - d;
 				g = starColor[1] - d;
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
-				a = 1.0;
+				a = 1.0 - d / 3.;
 
                 {# Grid Bold #}
                 if((sin(p.x*50.) > 0. && sin(p.x*50.) < 0.05) || (sin(p.y*50.) > 0. && sin(p.y*50.) < 0.05)){
