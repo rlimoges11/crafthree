@@ -7,17 +7,37 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
+{% block ui %}
+    <div id="editor">
+        {% if entry is defined %}
+            {% if entry.isEditable() and not craft.request.isLivePreview %}
+                <a href="{{ entry.cpEditUrl }}" class="editorLink">Edit entry</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
 {% block scene %}{% endblock %}
 {% block scripts %}
     <script id="vertexShader" type="x-shader/x-vertex">
         varying vec2 vUv;
         varying vec3 vPos;
+        uniform float timer;
+        uniform float planetPositionsX[9], planetPositionsY[9];
 
         void main(void){
             vUv = uv;
             vec2 p = -1.0 + 2.0 * vUv;
-            float d = sqrt(((p.x*p.x) + (p.y*p.y)));
-            vec3 newPos = position + vec3(0,0,d*1000.0 - 100.0);
+            float d = sin(sqrt(((p.x*p.x) + (p.y*p.y))));
+
+            {# Sun #}
+            vec3 newPos = position + vec3(0,0,d*1000.0 - 500.0);
+
+            {# Orbits #}
+            for(int i=0;i<9;i++){
+                float di = sin(sqrt(((p.x*p.x) + (p.y*p.y))));
+                newPos = newPos + vec3(0,0,di);
+            }
+
             vPos = newPos;
             gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0 );
         }
@@ -32,13 +52,13 @@
 
 			void main()	{
 				vec2 p = -1.0 + 2.0 * vUv;
-				d = sqrt(((p.x*p.x) + (p.y*p.y)))*16.0;
+				d = sqrt(((p.x*p.x) + (p.y*p.y)))*4.0;
 
                 {# Solar glow #}
 				r = starColor[0] - d;
 				g = starColor[1] - d;
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
-				a = 0.8;
+				a = 0.4;
 
                 {# Grid Bold #}
                 if((sin(p.x*50.) > 0. && sin(p.x*50.) < 0.05) || (sin(p.y*50.) > 0. && sin(p.y*50.) < 0.05)){
@@ -46,6 +66,7 @@
                     g = starColor[1] - (d / 5.);
                     b = starColor[2] - (d / 5.);
                 }
+                {# Grid sublines #}
                 if((sin(p.x*500.) > 0. && sin(p.x*500.) < 0.05) || (sin(p.y*500.) > 0. && sin(p.y*500.) < 0.05)){
                     r = starColor[0] - (d / 5.);
                     g = starColor[1] - (d / 5.);
@@ -54,11 +75,11 @@
 
                 {# Orbits #}
                 for(int i=0;i<9;i++){
-                    if(d*310.0 + 2.0 > planetOrbitalDistances[i] && d*310.0 - 2.0 < planetOrbitalDistances[i]){
+                    if(d*1260.0 + 2.0 > planetOrbitalDistances[i] && d*1260.0 - 2.0 < planetOrbitalDistances[i]){
                         r= planetColorsR[i];
                         g= planetColorsG[i];
                         b= planetColorsB[i];
-                        a = 0.9;
+                        {#a = 0.9;#}
                     }
                 }
 

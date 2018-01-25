@@ -11,6 +11,8 @@ var engine = function () {
         engine.planetColorsR = [];
         engine.planetColorsG = [];
         engine.planetColorsB = [];
+        engine.planetPositionsX = [];
+        engine.planetPositionsY = [];
         engine.clock = new THREE.Clock();
         engine.scene = new THREE.Scene();
 
@@ -57,6 +59,8 @@ var engine = function () {
             planetColorsR: {value: engine.planetColorsR},
             planetColorsG: {value: engine.planetColorsG},
             planetColorsB: {value: engine.planetColorsB},
+            planetPositionsX: {value: engine.planetPositionsX},
+            planetPositionsY: {value: engine.planetPositionsY},
             starColor: {value: engine.star.material.color},
             timer: {value: engine.clock.elapsedTime / 10}
         };
@@ -119,15 +123,19 @@ var engine = function () {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
                 var material = new THREE.MeshBasicMaterial({color: data.color});
                 var obj = new THREE.Mesh(geometry, material);
+
                 obj.name = data.name;
                 obj.orbitalDistance = data.orbitalDistance;
                 obj.orbitalVelocity = data.orbitalVelocity;
+                var d = Math.sin(obj.orbitalDistance);
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 engine.planets.push(obj);
                 engine.planetOrbitalDistances.push(obj.orbitalDistance);
                 engine.planetColorsR.push(material.color.r.toFixed(2));
                 engine.planetColorsG.push(material.color.g.toFixed(2));
                 engine.planetColorsB.push(material.color.b.toFixed(2));
+                engine.planetPositionsX.push(obj.position.x);
+                engine.planetPositionsY.push(obj.position.x);
                 engine.scene.add(obj);
                 break;
             }
@@ -137,6 +145,7 @@ var engine = function () {
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 engine.star = obj;
+                engine.star.position.setY(-380);
                 engine.scene.add(obj);
                 break;
             }
