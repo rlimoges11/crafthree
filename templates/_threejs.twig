@@ -34,18 +34,16 @@
             vec3 newPos = position + vec3(0,0,d*1000.0 - 500.0);
 
             {# Orbits #}
-            for(int i=0;i<9;i++){
-                {#float d2 = (sin(planetPositionsX[i] * p.x) + cos(planetPositionsY[i]))*200.0;#}
-                {#float d2 = sin(p.x * timer)*100.0 * sin(sqrt(((planetPositionsX[i]*planetPositionsX[i]) + (planetPositionsY[i]*planetPositionsY[i]))))*10.0;#}
-                {#float d2 = sin(p.x + timer) * cos(p.y + timer) * 100. ;#}
-
-                    float plx = planetPositionsX[i] / 5000.;
-                    float ply = planetPositionsY[i] / 5000.;
-                    float p1 = (plx-p.x);
-                    float p2 = (ply-p.y);
-                    float pld = sqrt(p1*p1+p2*p2) * 20.;
-
-                newPos = newPos + vec3(0,0,pld);
+            for(int i=0;i<4;i++){
+                {# position #}
+                float plx = planetPositionsX[i] / 5000.;
+                float ply = planetPositionsY[i] / 5000.;
+                float p1 = (plx-p.x);
+                float p2 = (ply-p.y);
+                float pld = sqrt(p1*p1+p2*p2) * 20.;
+                if(pld < 5.0 ){
+                    newPos = newPos + vec3(0,0,0.-pld*30.);
+                }
             }
 
             vPos = newPos;
@@ -86,7 +84,7 @@
                 }
 
                 {# Planets #}
-                for(int i=0;i<9;i++){
+                for(int i=0;i<4;i++){
                     {# Orbits #}
                     if(d*1260. + 2. > planetOrbitalDistances[i] && d*1260. - 2. < planetOrbitalDistances[i]){
                         r= planetColorsR[i];
@@ -102,10 +100,10 @@
                     float p2 = (ply-p.y);
                     float pld = sqrt(p1*p1+p2*p2) * 20.;
                     if(pld < 1.0 ){
-                        r= planetColorsR[i];
-                        g= planetColorsG[i];
-                        b= planetColorsB[i];
-                        {#a= r;#}
+                        r= planetColorsR[i]/2. + r - 0.2;
+                        g= planetColorsG[i]/2. + g - 0.2;
+                        b= planetColorsB[i]/2. + b -0.2;
+                        a= r;
                     }
                 }
 

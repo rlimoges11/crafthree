@@ -67,7 +67,7 @@ var engine = function () {
         };
 
         // ShaderMesh
-        var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 100, 100);
+        var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 200, 200);
         var material = new THREE.ShaderMaterial({
             uniforms: engine.uniforms,
             vertexShader: document.getElementById('vertexShader').textContent,
