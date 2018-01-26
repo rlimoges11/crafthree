@@ -35,14 +35,13 @@
 
             {# Orbits #}
             for(int i=0;i<9;i++){
-                {# position #}
                 float plx = planetPositionsX[i] / 5000.;
                 float ply = planetPositionsY[i] / 5000.;
                 float p1 = (plx-p.x);
                 float p2 = (ply-p.y);
                 float pld = (p1*p1+p2*p2) * 30.;
-                if(pld < planetRadii[i] / 200. ){
-                    newPos = newPos + vec3(0,0,pld*pld * planetRadii[i] * 10. - d*500.);
+                if(pld < planetRadii[i] / 500. ){
+                    newPos = newPos + vec3(0,0,(pld) * (planetRadii[i]*10.) - 350.*d);
                 }
             }
 
@@ -68,7 +67,7 @@
 				r = starColor[0] - d;
 				g = starColor[1] - d;
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
-				a = 1.0 - d / 3.;
+				a = (1.0 - d / 4.) / 1.75;
 
                 {# Grid Bold #}
                 if((sin(p.x*50.) > 0. && sin(p.x*50.) < 0.05) || (sin(p.y*50.) > 0. && sin(p.y*50.) < 0.05)){
@@ -92,30 +91,25 @@
                     float p1 = plx - p.x;
                     float p2 = ply - p.y;
                     float pld = sqrt(p1*p1 + p2*p2)*20.;
-                    float c = sin(pld*2.-timer*120.);
+                    float c = sin(pld*4.-timer*240.);
 
                     if(d*1260. + t > planetOrbitalDistances[i] && d*1260. - t < planetOrbitalDistances[i]){
                         if(c > 0.3) {
                             r=r/5. + planetColorsR[i]*c;
                             g=g/5. + planetColorsG[i]*c;
                             b=b/5. + planetColorsB[i]*c;
-                            {#a = c;#}
                         } else {
-                            r= r/5. + planetColorsR[i]/3.;
-                            g= g/5. + planetColorsG[i]/3.;
-                            b= b/5. + planetColorsB[i]/3.;
-
+                            r= r/5. + planetColorsR[i]/5.;
+                            g= g/5. + planetColorsG[i]/5.;
+                            b= b/5. + planetColorsB[i]/5.;
                         }
-
-
                     }
 
-                    {# position #}
+                    {# Shadow #}
                     if(pld < planetRadii[i]/100.){
-                        r= planetColorsR[i]/2. + r - 0.2;
-                        g= planetColorsG[i]/2. + g - 0.2;
-                        b= planetColorsB[i]/2. + b -0.2;
-                        a= 0.3;
+                        r= planetColorsR[i]/5. + r/5.;
+                        g= planetColorsG[i]/5. + g/5.;
+                        b= planetColorsB[i]/5. + b/5.;
                     }
                 }
 

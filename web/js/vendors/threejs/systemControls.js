@@ -27,11 +27,11 @@ THREE.systemControls = function (object, domElement) {
 
     // How far you can dolly in and out ( PerspectiveCamera only )
     this.minDistance = 200;
-    this.maxDistance = 5000;
+    this.maxDistance = 7000;
 
     // How far you can zoom in and out ( OrthographicCamera only )
     this.minZoom = 200;
-    this.maxZoom = 5000;
+    this.maxZoom = 7000;
 
     // How far you can orbit vertically, upper and lower limits.
     // Range is 0 to Math.PI radians.

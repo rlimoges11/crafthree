@@ -32,8 +32,8 @@ var engine = function () {
         engine.scene.children[0].name = "Ambient light";
 
         // Camera
-        engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
-        engine.camera.position.set(1000, 1000, 1000);
+        engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 12500);
+        engine.camera.position.set(0, 1000, 5000);
 
         // Setup controls
         engine.controls = new THREE.systemControls(engine.camera);
@@ -47,13 +47,6 @@ var engine = function () {
         for (var i = 0, len = engine.json.length; i < len; i++) {
             engine.addObj(i);
         }
-
-        // Grid
-        // engine.grid = new THREE.GridHelper(engine.gridSegments, engine.gridSegments, 0x333333, 0x222200);
-        // engine.grid.geometry.scale(engine.gridSize / engine.gridSegments, 0, engine.gridSize / engine.gridSegments);
-        // engine.grid.name = "Grid";
-        // engine.grid.visible = engine.gridVisible;
-        // engine.scene.add(engine.grid);
 
         // Shader constants
         engine.uniforms = {
@@ -131,7 +124,7 @@ var engine = function () {
         switch (data.type) {
             case "planet": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color});
+                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
 
                 obj.name = data.name;
@@ -154,7 +147,7 @@ var engine = function () {
             }
             case "star": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
+                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.75, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 engine.star = obj;
