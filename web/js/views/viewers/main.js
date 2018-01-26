@@ -100,11 +100,11 @@ var engine = function () {
 
         // Orbits
         for (var i = 0; i < engine.planets.length; i++) {
-            var x = Math.sin(i+(i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
-            var z = Math.cos(i+(i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
-            engine.planets[i].position.set(x, 0, z);
+            var x = Math.sin(i + (i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
+            var z = Math.cos(i + (i + engine.planets[i].orbitalVelocity / 100) * -engine.timer) * engine.planets[i].orbitalDistance;
+            engine.planets[i].position.set(x, -500 + engine.planets[i].orbitalDistance / 5, z);
             engine.planetPositionsX[i] = x;
-            engine.planetPositionsY[i] = 0-z;
+            engine.planetPositionsY[i] = 0 - z;
             engine.shaderMesh.material.uniforms.planetPositionsX.value = engine.planetPositionsX;
             engine.shaderMesh.material.uniforms.planetPositionsY.value = engine.planetPositionsY;
         }
@@ -140,7 +140,7 @@ var engine = function () {
                 engine.planetColorsG.push(material.color.g.toFixed(2));
                 engine.planetColorsB.push(material.color.b.toFixed(2));
                 engine.planetPositionsX[engine.planetPositionsX.length] = obj.position.x;
-                engine.planetPositionsY[engine.planetPositionsY.length]= obj.position.z;
+                engine.planetPositionsY[engine.planetPositionsY.length] = obj.position.z;
 
                 engine.scene.add(obj);
                 break;
@@ -151,7 +151,7 @@ var engine = function () {
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 engine.star = obj;
-                // engine.star.position.setY(-380);
+                engine.star.position.setY(-350);
                 engine.scene.add(obj);
                 break;
             }
