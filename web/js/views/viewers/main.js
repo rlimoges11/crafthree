@@ -16,6 +16,8 @@ var engine = function () {
         engine.planetPositionsY = [];
         engine.emitters = [];
         engine.clock = new THREE.Clock();
+        engine.raycaster = new THREE.Raycaster();
+        engine.mouse = new THREE.Vector2();
         engine.tick = 0;
         engine.timer = engine.clock.elapsedTime / 50;
         engine.scene = new THREE.Scene();
@@ -161,6 +163,19 @@ var engine = function () {
         // Controls
         engine.controls.update(engine.clock.getDelta());
 
+        // Targeting
+        engine.raycaster.setFromCamera( engine.mouse, engine.camera );
+
+        // calculate objects intersecting the picking ray
+        var intersects = engine.raycaster.intersectObjects( engine.scene.children );
+
+        for ( var i = 0; i < intersects.length; i++ ) {
+            if(intersects[ i ].object.targetable) {
+                // intersects[ i ].object.material.color.set( 0xff0000 );
+            }
+        }
+
+
         // Stats
         engine.stats.update();
 
@@ -194,6 +209,7 @@ var engine = function () {
                 }
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
+                obj.targetable = true;
                 obj.radius = data.radius;
                 obj.orbitalDistance = data.orbitalDistance;
                 obj.orbitalVelocity = data.orbitalVelocity;
@@ -217,6 +233,7 @@ var engine = function () {
                 var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
+                obj.targetable = true;
                 engine.star = obj;
                 engine.star.position.setY(-350);
                 engine.scene.add(obj);
@@ -249,22 +266,31 @@ var engine = function () {
     };
 
     window.addEventListener('resize', onWindowResize, false);
+    window.addEventListener('mousemove', onMouseMove, false);
 
     this.init();
     this.animate();
 };
 
-var engine = new engine();
-window.addEventListener('resize', onWindowResize(), false);
-
 function onWindowResize() {
     if (engine) {
         engine.camera.aspect = window.innerWidth / window.innerHeight;
         engine.camera.updateProjectionMatrix();
-
         // engine.scanCamera.aspect = window.innerWidth / window.innerHeight;
         // engine.scanCamera.updateProjectionMatrix();
 
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
+
     }
 }
+
+function onMouseMove(event) {
+    // calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+    if (engine) {
+        engine.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        engine.mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+    }
+}
+
+var engine = new engine();
