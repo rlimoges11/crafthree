@@ -15,6 +15,7 @@ var engine = function () {
         engine.planetPositionsX = [];
         engine.planetPositionsY = [];
         engine.clock = new THREE.Clock();
+        engine.tick = 0;
         engine.timer = engine.clock.elapsedTime / 50;
         engine.scene = new THREE.Scene();
 
@@ -77,6 +78,45 @@ var engine = function () {
         // engine.shaderMesh.position.set(0, -100, 0);
         engine.scene.add(engine.shaderMesh);
 
+
+        // Particle System
+        engine.particleSystem = new THREE.GPUParticleSystem({
+            maxParticles: 250000
+        });
+        engine.scene.add(engine.particleSystem);
+        // options passed during each spawned
+        engine.particleSystem.options = {
+            position: new THREE.Vector3(),
+            positionRandomness: .3,
+            velocity: new THREE.Vector3(),
+            velocityRandomness: .5,
+            color: 0xaa88ff,
+            colorRandomness: .2,
+            turbulence: .5,
+            lifetime: 2,
+            size: 5,
+            sizeRandomness: 1
+        };
+        engine.particleSystem.spawnerOptions = {
+            spawnRate: 15000,
+            horizontalSpeed: 1.5,
+            verticalSpeed: 1.33,
+            timeScale: 1
+        };
+
+        // Append GUI
+        engine.gui = new dat.GUI({width: 350});
+        engine.gui.add(engine.particleSystem.options, "velocityRandomness", 0, 3);
+        engine.gui.add(engine.particleSystem.options, "positionRandomness", 0, 3);
+        engine.gui.add(engine.particleSystem.options, "size", 1, 20);
+        engine.gui.add(engine.particleSystem.options, "sizeRandomness", 0, 25);
+        engine.gui.add(engine.particleSystem.options, "colorRandomness", 0, 1);
+        engine.gui.add(engine.particleSystem.options, "lifetime", .1, 10);
+        engine.gui.add(engine.particleSystem.options, "turbulence", 0, 1);
+        engine.gui.add(engine.particleSystem.spawnerOptions, "spawnRate", 10, 30000);
+        engine.gui.add(engine.particleSystem.spawnerOptions, "timeScale", -1, 1);
+
+
         // Append Renderer
         engine.renderer = new THREE.WebGLRenderer({antialias: true});
         engine.renderer.setPixelRatio(window.devicePixelRatio);
@@ -110,10 +150,32 @@ var engine = function () {
             engine.shaderMesh.material.uniforms.planetPositionsY.value = engine.planetPositionsY;
         }
 
+        // Shaders
         engine.shaderMesh.material.uniforms.needsUpdate = true;
 
+        // Particles
+        var delta = engine.clock.getDelta() * engine.particleSystem.spawnerOptions.timeScale;
+        engine.tick += delta;
+        if (engine.tick < 0) engine.tick = 0;
+        if (delta > 0) {
+            engine.particleSystem.options.position.x = Math.sin(engine.tick * engine.particleSystem.spawnerOptions.horizontalSpeed) * 20;
+            engine.particleSystem.options.position.y = Math.sin(engine.tick * engine.particleSystem.spawnerOptions.verticalSpeed) * 10;
+            engine.particleSystem.options.position.z = Math.sin(engine.tick * engine.particleSystem.spawnerOptions.horizontalSpeed + engine.particleSystem.spawnerOptions.verticalSpeed) * 5;
+            for (var x = 0; x < engine.particleSystem.spawnerOptions.spawnRate * delta; x++) {
+                // Yep, that's really it.	Spawning particles is super cheap, and once you spawn them, the rest of
+                // their lifecycle is handled entirely on the GPU, driven by a time uniform updated below
+                engine.particleSystem.spawnParticle(engine.particleSystem.options);
+            }
+        }
+        engine.particleSystem.update(engine.tick);
+
+        // Controls
         engine.controls.update(engine.clock.getDelta());
+
+        // Stats
         engine.stats.update();
+
+        // Render
         engine.renderer.render(engine.scene, engine.camera);
     };
 
