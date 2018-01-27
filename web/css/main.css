@@ -42,3 +42,8 @@ a {
     color: #000000;
     opacity: 0.5;
 }
+
+.dg.ac {
+    top: 300px !important;
+    right: 50px;
+}

@@ -96,16 +96,16 @@ var engine = function () {
         engine.scene.add(engine.particleSystem);
 
         // Append GUI
-        // engine.gui = new dat.GUI({width: 350});
-        // engine.gui.add(engine.emitters["star"].options, "velocityRandomness", 0, 3);
-        // engine.gui.add(engine.emitters["star"].options, "positionRandomness", 0, 3);
-        // engine.gui.add(engine.emitters["star"].options, "size", 1, 20);
-        // engine.gui.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
-        // engine.gui.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
-        // engine.gui.add(engine.emitters["star"].options, "lifetime", .1, 100);
-        // engine.gui.add(engine.emitters["star"].options, "turbulence", 0, 1);
-        // engine.gui.add(engine.emitters["star"].spawner, "spawnRate", 10, 10000);
-        // engine.gui.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
+        engine.gui = new dat.GUI({width: 350});
+        engine.gui.add(engine.emitters["star"].options, "velocityRandomness", 0, 3);
+        engine.gui.add(engine.emitters["star"].options, "positionRandomness", 0, 3);
+        engine.gui.add(engine.emitters["star"].options, "size", 1, 20);
+        engine.gui.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
+        engine.gui.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
+        engine.gui.add(engine.emitters["star"].options, "lifetime", .1, 100);
+        engine.gui.add(engine.emitters["star"].options, "turbulence", 0, 1);
+        engine.gui.add(engine.emitters["star"].spawner, "spawnRate", 10, 10000);
+        engine.gui.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
 
 
         // Append Renderer
@@ -165,13 +165,11 @@ var engine = function () {
         engine.stats.update();
 
         // Main Cam
-        engine.camera.updateProjectionMatrix();
         engine.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
         engine.renderer.render(engine.scene, engine.camera);
 
         // Scan Cam
-        // engine.scanCamera.updateProjectionMatrix();
-        engine.renderer.setViewport(window.innerWidth - 450, 50, 400, 350);
+        engine.renderer.setViewport(window.innerWidth - 365, 50, 350, 250);
         engine.renderer.render(engine.scene, engine.scanCamera);
     };
 
