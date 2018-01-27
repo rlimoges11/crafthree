@@ -14,6 +14,7 @@ var engine = function () {
         engine.planetRadii = [];
         engine.planetPositionsX = [];
         engine.planetPositionsY = [];
+        engine.emitters = [];
         engine.clock = new THREE.Clock();
         engine.tick = 0;
         engine.timer = engine.clock.elapsedTime / 50;
@@ -84,37 +85,20 @@ var engine = function () {
             maxParticles: 250000
         });
         engine.scene.add(engine.particleSystem);
-        // options passed during each spawned
-        engine.particleSystem.options = {
-            position: new THREE.Vector3(),
-            positionRandomness: .3,
-            velocity: new THREE.Vector3(),
-            velocityRandomness: .5,
-            color: 0xaa88ff,
-            colorRandomness: .2,
-            turbulence: .5,
-            lifetime: 2,
-            size: 5,
-            sizeRandomness: 1
-        };
-        engine.particleSystem.spawnerOptions = {
-            spawnRate: 15000,
-            horizontalSpeed: 1.5,
-            verticalSpeed: 1.33,
-            timeScale: 1
-        };
+
+        engine.addEmitters();
 
         // Append GUI
         engine.gui = new dat.GUI({width: 350});
-        engine.gui.add(engine.particleSystem.options, "velocityRandomness", 0, 3);
-        engine.gui.add(engine.particleSystem.options, "positionRandomness", 0, 3);
-        engine.gui.add(engine.particleSystem.options, "size", 1, 20);
-        engine.gui.add(engine.particleSystem.options, "sizeRandomness", 0, 25);
-        engine.gui.add(engine.particleSystem.options, "colorRandomness", 0, 1);
-        engine.gui.add(engine.particleSystem.options, "lifetime", .1, 10);
-        engine.gui.add(engine.particleSystem.options, "turbulence", 0, 1);
-        engine.gui.add(engine.particleSystem.spawnerOptions, "spawnRate", 10, 30000);
-        engine.gui.add(engine.particleSystem.spawnerOptions, "timeScale", -1, 1);
+        engine.gui.add(engine.emitters["star"].options, "velocityRandomness", 0, 3);
+        engine.gui.add(engine.emitters["star"].options, "positionRandomness", 0, 3);
+        engine.gui.add(engine.emitters["star"].options, "size", 1, 20);
+        engine.gui.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
+        engine.gui.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
+        engine.gui.add(engine.emitters["star"].options, "lifetime", .1, 100);
+        engine.gui.add(engine.emitters["star"].options, "turbulence", 0, 1);
+        engine.gui.add(engine.emitters["star"].spawner, "spawnRate", 10, 10000);
+        engine.gui.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
 
 
         // Append Renderer
@@ -153,18 +137,18 @@ var engine = function () {
         // Shaders
         engine.shaderMesh.material.uniforms.needsUpdate = true;
 
-        // Particles
-        var delta = engine.clock.getDelta() * engine.particleSystem.spawnerOptions.timeScale;
+        // Particle Emitters
+
+        // Star
+        var delta = engine.clock.getDelta() * engine.emitters["star"].spawner.timeScale;
         engine.tick += delta;
         if (engine.tick < 0) engine.tick = 0;
         if (delta > 0) {
-            engine.particleSystem.options.position.x = Math.sin(engine.tick * engine.particleSystem.spawnerOptions.horizontalSpeed) * 20;
-            engine.particleSystem.options.position.y = Math.sin(engine.tick * engine.particleSystem.spawnerOptions.verticalSpeed) * 10;
-            engine.particleSystem.options.position.z = Math.sin(engine.tick * engine.particleSystem.spawnerOptions.horizontalSpeed + engine.particleSystem.spawnerOptions.verticalSpeed) * 5;
-            for (var x = 0; x < engine.particleSystem.spawnerOptions.spawnRate * delta; x++) {
-                // Yep, that's really it.	Spawning particles is super cheap, and once you spawn them, the rest of
-                // their lifecycle is handled entirely on the GPU, driven by a time uniform updated below
-                engine.particleSystem.spawnParticle(engine.particleSystem.options);
+            // engine.emitters["star"].options.position.x = Math.sin(engine.tick * engine.emitters["star"].spawner.horizontalSpeed) * 20;
+            // engine.emitters["star"].options.position.y = Math.sin(engine.tick * engine.emitters["star"].spawner.verticalSpeed) * 20;
+            // engine.emitters["star"].options.position.z = Math.sin(engine.tick * engine.emitters["star"].spawner.horizontalSpeed + engine.emitters["star"].spawner.verticalSpeed) * 5;
+            for (var x = 0; x < engine.emitters["star"].spawner.spawnRate * delta; x++) {
+                engine.particleSystem.spawnParticle(engine.emitters["star"].options);
             }
         }
         engine.particleSystem.update(engine.tick);
@@ -218,8 +202,8 @@ var engine = function () {
                 break;
             }
             case "star": {
-                var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.75, transparent: true});
+                var geometry = new THREE.SphereGeometry(data.radius / 3., 32, 32);
+                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 engine.star = obj;
@@ -229,6 +213,32 @@ var engine = function () {
             }
         }
     };
+
+    engine.addEmitters = function (){
+        // Star
+        engine.emitters["star"] = {};
+        engine.emitters["star"].options = {
+            position: new THREE.Vector3(0, -350, 0),
+            positionRandomness: 10,
+            velocity: new THREE.Vector3(),
+            velocityRandomness: 3,
+            color: engine.star.material.color,
+            colorRandomness: 0.6,
+            turbulence: 0.1,
+            lifetime: 25,
+            size: 5,
+            sizeRandomness: 10
+        };
+
+        engine.emitters["star"].spawner = {
+            spawnRate: 300,
+            horizontalSpeed: 1,
+            verticalSpeed: 1,
+            timeScale: 4
+        };
+
+    };
+
 
     window.addEventListener('resize', onWindowResize, false);
 
