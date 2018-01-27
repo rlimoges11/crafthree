@@ -10,7 +10,7 @@
 {% block ui %}
     <div id="editor">
         {% if entry is defined %}
-            {% if entry.isEditable() and not craft.request.isLivePreview %}
+            {% if entry.isEditable() and not craft.app.request.isLivePreview %}
                 <a href="{{ entry.cpEditUrl }}" class="editorLink">Edit entry</a>
             {% endif %}
         {% endif %}
@@ -31,7 +31,7 @@
             float d = sin(sqrt(((p.x*p.x) + (p.y*p.y))));
 
             {# Sun #}
-            vec3 newPos = position + vec3(0,0,d*1000.0 - 500.0);
+            vec3 newPos = position + vec3(0, 0, d*1000.0 - 500.0);
 
             {# Orbits #}
             for(int i=0;i<9;i++){
@@ -98,13 +98,13 @@
 
                     if(d*1260. + t > planetOrbitalDistances[i] && d*1260. - t < planetOrbitalDistances[i]){
                         if(c > 0.3) {
-                            r=r/5. + planetColorsR[i]*c;
-                            g=g/5. + planetColorsG[i]*c;
-                            b=b/5. + planetColorsB[i]*c;
+                            r = r/5. + planetColorsR[i]*c;
+                            g = g/5. + planetColorsG[i]*c;
+                            b = b/5. + planetColorsB[i]*c;
                         } else {
-                            r= r/5. + planetColorsR[i]/5.;
-                            g= g/5. + planetColorsG[i]/5.;
-                            b= b/5. + planetColorsB[i]/5.;
+                            r = r/5. + planetColorsR[i]/5.;
+                            g = g/5. + planetColorsG[i]/5.;
+                            b = b/5. + planetColorsB[i]/5.;
                         }
                     }
 

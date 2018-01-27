@@ -1,29 +1,29 @@
 {% macro printArray(scene) %}
-    <script>
+    <script>{% spaceless %}
         var json = [];
-        {% for block in scene %}
-            var data = [];
+        {% for block in scene.all() %}
+        var data = [];
+        {% if block.type == "star" %}
+        data["name"] = "{{ block.type }}-{{ block.id }}";
+        data["type"] = "{{ block.type }}";
+        data["id"] = "{{ block.id }}";
+        data["color"] = "{{ block.color.hex }}";
+        data["radius"] = {{ block.radius }};
 
-            {% if block.type == "star" %}
-                data["name"] = "{{ block.type }}-{{ block.id }}";
-                data["type"] = "{{ block.type }}";
-                data["id"] = "{{ block.id }}";
-                data["color"] = "{{ block.color.hex }}";
-                data["radius"] = {{ block.radius }};
-
-            {% elseif block.type == "planet" %}
-                data["name"] = "{{ block.type }}-{{ block.id }}";
-                data["type"] = "{{ block.type }}";
-                data["id"] = "{{ block.id }}";
-                data["color"] = "{{ block.color.hex }}";
-                data["radius"] = {{ block.radius }};
-                data["orbitalDistance"] = {{ block.orbitalDistance}};
-                data["orbitalVelocity"] = {{ block.orbitalVelocity}};
-
-            {% endif %}
+        {% elseif block.type == "planet" %}
+        {% if block.texture|length %}
+        data["texture"] = "{{ block.texture.first.url }}";
+        {% endif %}
+        data["name"] = "{{ block.type }}-{{ block.id }}";
+        data["type"] = "{{ block.type }}";
+        data["id"] = "{{ block.id }}";
+        data["color"] = "{{ block.color.hex }}";
+        data["radius"] = {{ block.radius }};
+        data["orbitalDistance"] = {{ block.orbitalDistance }};
+        data["orbitalVelocity"] = {{ block.orbitalVelocity }};
+        {% endif %}
 
         json.push(data);
-
         {% endfor %}
-    </script>
+        {% endspaceless %}</script>
 {% endmacro %}
