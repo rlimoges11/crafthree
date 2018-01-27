@@ -39,9 +39,9 @@
                 float ply = planetPositionsY[i] / 5000.;
                 float p1 = (plx-p.x);
                 float p2 = (ply-p.y);
-                float pld = (p1*p1+p2*p2) * 30.;
-                if(pld < planetRadii[i] / 500. ){
-                    newPos = newPos + vec3(0,0,(pld * planetRadii[i]*10.-planetRadii[i]*2. ));
+                float pld = (p1*p1+p2*p2) * 80.;
+                if(pld < planetRadii[i] / 200. ){
+                    newPos = newPos + vec3(0,0,(pld * planetRadii[i]*8. -planetRadii[i]*(d*5.) - 30. ));
                 }
             }
 
@@ -70,14 +70,14 @@
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
 				a = (1.0 - d / 4.) / 1.75;
 
-                {# Grid sublines #}
-                if((sin(p.x*500.+timer*3.) > -0.05 && sin(p.x*500.+timer*3.) < 0.05) || (sin(p.y*500.+timer*3.) > -0.05 && sin(p.y*500.+timer*3.) < 0.05)){
-                    r = starColor[0] - (d/4.);
-                    g = starColor[1] - (d/4.);
-                    b = starColor[2] - (d/4.);
-                }
 
-                {# Grid Bold #}
+                {# Grid Lines Bold #}
+                if((sin(p.x*250.) > -0.05 && sin(p.x*250.) < 0.05) || (sin(p.y*250.) > -0.05 && sin(p.y*250.) < 0.05)){
+                    r = starColor[0]*0.8 - (d/4.);
+                    g = starColor[1]*0.8 - (d/4.);
+                    b = starColor[2]*0.8 - (d/4.);
+                }
+                {# Grid Lines Main #}
                 if((sin(p.x*50.) > -0.01 && sin(p.x*50.) < 0.01) || (sin(p.y*50.) > -0.01 && sin(p.y*50.) < 0.01)){
                     r = starColor[0] + (d/6.);
                     g = starColor[1] + (d/6.);
