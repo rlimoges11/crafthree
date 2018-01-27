@@ -105,6 +105,7 @@ var engine = function () {
             engine.planets[i].position.set(x, -500 + engine.planets[i].orbitalDistance / 5, z);
             engine.planetPositionsX[i] = x;
             engine.planetPositionsY[i] = 0 - z;
+            engine.planets[i].rotateY(-0.01);
             engine.shaderMesh.material.uniforms.planetPositionsX.value = engine.planetPositionsX;
             engine.shaderMesh.material.uniforms.planetPositionsY.value = engine.planetPositionsY;
         }
@@ -124,7 +125,16 @@ var engine = function () {
         switch (data.type) {
             case "planet": {
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
+                if (data.texture) {
+                    data.texture = "/" + data.texture;
+                    var texture = new THREE.TextureLoader().load(data.texture);
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    texture.repeat.set(2, 2);
+                    var material = new THREE.MeshLambertMaterial({color: data.color, map: texture});
+                } else {
+                    var material = new THREE.MeshLambertMaterial({color: data.color, opacity: 0.9, transparent: true});
+                }
                 var obj = new THREE.Mesh(geometry, material);
 
                 obj.name = data.name;

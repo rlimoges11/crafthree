@@ -12,7 +12,7 @@
 
         {% elseif block.type == "planet" %}
         {% if block.texture|length %}
-        data["texture"] = "{{ block.texture.first.url }}";
+        data["texture"] = "{{ block.texture.one.url }}";
         {% endif %}
         data["name"] = "{{ block.type }}-{{ block.id }}";
         data["type"] = "{{ block.type }}";
