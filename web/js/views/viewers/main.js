@@ -33,9 +33,18 @@ var engine = function () {
         engine.scene.add(new THREE.AmbientLight(0x666666));
         engine.scene.children[0].name = "Ambient light";
 
-        // Camera
+        // Main Camera
         engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 12500);
         engine.camera.position.set(0, 1000, 5000);
+
+
+        // Scan Camera
+        engine.scanCamera = new THREE.PerspectiveCamera(45, 400 / 350, 1, 12500);
+        engine.scanCamera.position.set(0, -350, 150);
+        engine.scene.add(engine.scanCamera);
+
+        engine.scene.add(engine.scanCamera);
+
 
         // Setup controls
         engine.controls = new THREE.systemControls(engine.camera);
@@ -86,19 +95,17 @@ var engine = function () {
         });
         engine.scene.add(engine.particleSystem);
 
-        engine.addEmitters();
-
         // Append GUI
-        engine.gui = new dat.GUI({width: 350});
-        engine.gui.add(engine.emitters["star"].options, "velocityRandomness", 0, 3);
-        engine.gui.add(engine.emitters["star"].options, "positionRandomness", 0, 3);
-        engine.gui.add(engine.emitters["star"].options, "size", 1, 20);
-        engine.gui.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
-        engine.gui.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
-        engine.gui.add(engine.emitters["star"].options, "lifetime", .1, 100);
-        engine.gui.add(engine.emitters["star"].options, "turbulence", 0, 1);
-        engine.gui.add(engine.emitters["star"].spawner, "spawnRate", 10, 10000);
-        engine.gui.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
+        // engine.gui = new dat.GUI({width: 350});
+        // engine.gui.add(engine.emitters["star"].options, "velocityRandomness", 0, 3);
+        // engine.gui.add(engine.emitters["star"].options, "positionRandomness", 0, 3);
+        // engine.gui.add(engine.emitters["star"].options, "size", 1, 20);
+        // engine.gui.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
+        // engine.gui.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
+        // engine.gui.add(engine.emitters["star"].options, "lifetime", .1, 100);
+        // engine.gui.add(engine.emitters["star"].options, "turbulence", 0, 1);
+        // engine.gui.add(engine.emitters["star"].spawner, "spawnRate", 10, 10000);
+        // engine.gui.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
 
 
         // Append Renderer
@@ -106,8 +113,9 @@ var engine = function () {
         engine.renderer.setPixelRatio(window.devicePixelRatio);
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
         engine.renderer.setClearColor(0x000011);
-        engine.renderer.shadowMap.Enabled = true;
-        engine.renderer.shadowMap.Type = THREE.PCFSoftShadowMap;
+        engine.renderer.autoClear = false;
+        // engine.renderer.shadowMap.Enabled = true;
+        // engine.renderer.shadowMap.Type = THREE.PCFSoftShadowMap;
         engine.container.appendChild(engine.renderer.domElement);
 
         // Append stats
@@ -144,9 +152,6 @@ var engine = function () {
         engine.tick += delta;
         if (engine.tick < 0) engine.tick = 0;
         if (delta > 0) {
-            // engine.emitters["star"].options.position.x = Math.sin(engine.tick * engine.emitters["star"].spawner.horizontalSpeed) * 20;
-            // engine.emitters["star"].options.position.y = Math.sin(engine.tick * engine.emitters["star"].spawner.verticalSpeed) * 20;
-            // engine.emitters["star"].options.position.z = Math.sin(engine.tick * engine.emitters["star"].spawner.horizontalSpeed + engine.emitters["star"].spawner.verticalSpeed) * 5;
             for (var x = 0; x < engine.emitters["star"].spawner.spawnRate * delta; x++) {
                 engine.particleSystem.spawnParticle(engine.emitters["star"].options);
             }
@@ -159,8 +164,15 @@ var engine = function () {
         // Stats
         engine.stats.update();
 
-        // Render
+        // Main Cam
+        engine.camera.updateProjectionMatrix();
+        engine.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
         engine.renderer.render(engine.scene, engine.camera);
+
+        // Scan Cam
+        // engine.scanCamera.updateProjectionMatrix();
+        engine.renderer.setViewport(window.innerWidth - 450, 50, 400, 350);
+        engine.renderer.render(engine.scene, engine.scanCamera);
     };
 
     engine.addObj = function (idx) {
@@ -170,6 +182,7 @@ var engine = function () {
 
         switch (data.type) {
             case "planet": {
+                // Planet Object
                 var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
                 if (data.texture) {
                     data.texture = "/" + data.texture;
@@ -182,7 +195,6 @@ var engine = function () {
                     var material = new THREE.MeshLambertMaterial({color: data.color, opacity: 0.9, transparent: true});
                 }
                 var obj = new THREE.Mesh(geometry, material);
-
                 obj.name = data.name;
                 obj.radius = data.radius;
                 obj.orbitalDistance = data.orbitalDistance;
@@ -202,6 +214,7 @@ var engine = function () {
                 break;
             }
             case "star": {
+                // Star Object
                 var geometry = new THREE.SphereGeometry(data.radius / 3., 32, 32);
                 var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
@@ -209,36 +222,33 @@ var engine = function () {
                 engine.star = obj;
                 engine.star.position.setY(-350);
                 engine.scene.add(obj);
+
+                // Star Particle System
+                engine.emitters["star"] = {};
+                engine.emitters["star"].options = {
+                    position: new THREE.Vector3(0, -350, 0),
+                    positionRandomness: 10,
+                    velocity: new THREE.Vector3(),
+                    velocityRandomness: 3,
+                    color: engine.star.material.color,
+                    colorRandomness: 0.6,
+                    turbulence: 0.1,
+                    lifetime: 25,
+                    size: 5,
+                    sizeRandomness: 10
+                };
+
+                // Star Particle Spawner
+                engine.emitters["star"].spawner = {
+                    spawnRate: 300,
+                    horizontalSpeed: 1,
+                    verticalSpeed: 1,
+                    timeScale: 4
+                };
                 break;
             }
         }
     };
-
-    engine.addEmitters = function (){
-        // Star
-        engine.emitters["star"] = {};
-        engine.emitters["star"].options = {
-            position: new THREE.Vector3(0, -350, 0),
-            positionRandomness: 10,
-            velocity: new THREE.Vector3(),
-            velocityRandomness: 3,
-            color: engine.star.material.color,
-            colorRandomness: 0.6,
-            turbulence: 0.1,
-            lifetime: 25,
-            size: 5,
-            sizeRandomness: 10
-        };
-
-        engine.emitters["star"].spawner = {
-            spawnRate: 300,
-            horizontalSpeed: 1,
-            verticalSpeed: 1,
-            timeScale: 4
-        };
-
-    };
-
 
     window.addEventListener('resize', onWindowResize, false);
 
@@ -253,6 +263,10 @@ function onWindowResize() {
     if (engine) {
         engine.camera.aspect = window.innerWidth / window.innerHeight;
         engine.camera.updateProjectionMatrix();
+
+        // engine.scanCamera.aspect = window.innerWidth / window.innerHeight;
+        // engine.scanCamera.updateProjectionMatrix();
+
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 }
