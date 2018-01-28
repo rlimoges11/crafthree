@@ -46,4 +46,5 @@ a {
 .dg.ac {
     top: 300px !important;
     right: 50px;
+    opacity: 0.8;
 }
