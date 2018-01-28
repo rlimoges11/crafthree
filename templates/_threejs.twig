@@ -50,10 +50,12 @@
         }
 
 
+
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
 			varying vec2 vUv;
 			uniform float timer;
+			uniform bool showGrid;
 			float r, g, b, a, d;
 			uniform vec3 starColor;
 			uniform float planetOrbitalDistances[9], planetRadii[9];
@@ -70,17 +72,20 @@
 				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
 				a = (1.0 - d / 4.) / 1.75;
 
-                {# Grid Lines Bold #}
-                if((sin(p.x*250.) > -0.05 && sin(p.x*250.) < 0.05) || (sin(p.y*250.) > -0.05 && sin(p.y*250.) < 0.05)){
-                    r = starColor[0]*0.8 - (d/4.);
-                    g = starColor[1]*0.8 - (d/4.);
-                    b = starColor[2]*0.8 - (d/4.);
-                }
-                {# Grid Lines Main #}
-                if((sin(p.x*50.) > -0.01 && sin(p.x*50.) < 0.01) || (sin(p.y*50.) > -0.01 && sin(p.y*50.) < 0.01)){
-                    r = starColor[0] + (d/6.);
-                    g = starColor[1] + (d/6.);
-                    b = starColor[2] + (d/6.);
+
+            if(showGrid == true) {
+                    {# Grid Lines Bold #}
+                    if((sin(p.x*250.) > -0.05 && sin(p.x*250.) < 0.05) || (sin(p.y*250.) > -0.05 && sin(p.y*250.) < 0.05)){
+                        r = starColor[0]*0.8 - (d/4.);
+                        g = starColor[1]*0.8 - (d/4.);
+                        b = starColor[2]*0.8 - (d/4.);
+                    }
+                    {# Grid Lines Main #}
+                    if((sin(p.x*50.) > -0.01 && sin(p.x*50.) < 0.01) || (sin(p.y*50.) > -0.01 && sin(p.y*50.) < 0.01)){
+                        r = starColor[0] + (d/6.);
+                        g = starColor[1] + (d/6.);
+                        b = starColor[2] + (d/6.);
+                    }
                 }
 
                 {# Planets #}
@@ -117,6 +122,7 @@
                 if (b < 0.072) b = 0.072;
 				gl_FragColor = vec4(r, g, b, a);
 			}
+
 
 
     </script>

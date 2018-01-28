@@ -25,8 +25,8 @@ var engine = function () {
 
         // Engine ooptions
         engine.options = {};
-        engine.options.showGrid = true;
         engine.options.showOrbits = true;
+        engine.options.showGrid = true;
 
         // Settings
         engine.gridVisible = false;
@@ -64,7 +64,7 @@ var engine = function () {
 
         // Shader constants
         engine.uniforms = {
-            showGrid: {type: "b", value: engine.options.showGrid},
+            showGrid: {value: true},
             planetOrbitalDistances: {type: "f", value: engine.planetOrbitalDistances},
             planetRadii: {type: "f", value: engine.planetRadii},
             planetColorsR: {value: engine.planetColorsR},

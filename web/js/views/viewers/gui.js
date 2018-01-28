@@ -4,7 +4,10 @@ engine.appendGui = function () {
 
     // Engine Options Folder
     engine.optionsFolder = engine.gui.addFolder("Options");
-    engine.optionsFolder.add(engine.options, 'showGrid');
+    var showGrid = engine.optionsFolder.add(engine.options, 'showGrid');
+    showGrid.onChange(function () {
+        engine.shaderMesh.material.uniforms.showGrid.value = engine.options.showGrid;
+    });
     engine.optionsFolder.add(engine.options, 'showOrbits');
 };
 
