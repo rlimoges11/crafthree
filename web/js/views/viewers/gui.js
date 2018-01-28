@@ -34,6 +34,7 @@ engine.targetObj = function (obj) {
         if (obj) {
             engine.untarget();
             engine.scanTarget = obj;
+            engine.shaderMesh.material.uniforms.targetIndex.value = obj.targetIndex;
 
             // Update Options
             if (obj.objType) {

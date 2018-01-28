@@ -68,6 +68,7 @@ var engine = function () {
             showGrid: {value: true},
             showOrbits: {value: true},
             showWarp: {value: true},
+            targetIndex: {type: "i", value: 0},
             planetOrbitalDistances: {type: "f", value: engine.planetOrbitalDistances},
             planetRadii: {type: "f", value: engine.planetRadii},
             planetColorsR: {value: engine.planetColorsR},
@@ -222,6 +223,7 @@ var engine = function () {
                 var d = Math.sin(obj.orbitalDistance);
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 obj.objType = "planet";
+
                 engine.planetOrbitalDistances.push(obj.orbitalDistance);
                 engine.planetRadii.push(obj.options.radius);
                 engine.planetColorsR.push(material.color.r.toFixed(2));
@@ -229,6 +231,7 @@ var engine = function () {
                 engine.planetColorsB.push(material.color.b.toFixed(2));
                 engine.planetPositionsX[engine.planetPositionsX.length] = obj.position.x;
                 engine.planetPositionsY[engine.planetPositionsY.length] = obj.position.z;
+                obj.targetIndex = engine.planetRadii.length;
 
                 engine.scene.add(obj);
                 break;
@@ -244,6 +247,7 @@ var engine = function () {
                 obj.options = {"radius": data.radius};
                 engine.star = obj;
                 engine.star.position.setY(-350);
+                obj.targetIndex = 0;
                 engine.scene.add(obj);
 
                 // Star Particle System

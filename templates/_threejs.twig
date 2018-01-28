@@ -52,84 +52,97 @@
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
             }
         }
-
-
-
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
-			varying vec2 vUv;
-			uniform float timer;
-			uniform bool showGrid, showOrbits;
-			float r, g, b, a, d;
-			uniform vec3 starColor;
-			uniform float planetOrbitalDistances[9], planetRadii[9];
-			uniform float planetColorsR[9], planetColorsG[9], planetColorsB[9];
-            uniform float planetPositionsX[9], planetPositionsY[9];
+    varying vec2 vUv;
+    uniform float timer;
+    uniform bool showGrid, showOrbits;
+    uniform int targetIndex;
+    uniform vec3 starColor;
+    uniform float planetOrbitalDistances[9], planetRadii[9];
+    uniform float planetColorsR[9], planetColorsG[9], planetColorsB[9];
+    uniform float planetPositionsX[9], planetPositionsY[9];
 
-			void main()	{
-				vec2 p = -1.0 + 2.0 * vUv;
-				d = sqrt(((p.x*p.x) + (p.y*p.y)))*4.0;
+    float r, g, b, a, d;
 
-                {# Solar glow #}
-				r = starColor[0] - d;
-				g = starColor[1] - d;
-				b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
-				a = (1.0 - d / 4.) / 1.75;
+    void main()	{
+        vec2 p = -1.0 + 2.0 * vUv;
+        d = sqrt(((p.x*p.x) + (p.y*p.y)))*4.0;
 
+        {# Solar glow #}
+        r = starColor[0] - d;
+        g = starColor[1] - d;
+        b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
+        a = (1.0 - d / 4.) / 1.75;
 
-            if(showGrid == true) {
-                    {# Grid Lines Bold #}
-                    if((sin(p.x*250.) > -0.05 && sin(p.x*250.) < 0.05) || (sin(p.y*250.) > -0.05 && sin(p.y*250.) < 0.05)){
-                        r = starColor[0]*0.8 - (d/4.);
-                        g = starColor[1]*0.8 - (d/4.);
-                        b = starColor[2]*0.8 - (d/4.);
-                    }
-                    {# Grid Lines Main #}
-                    if((sin(p.x*50.) > -0.01 && sin(p.x*50.) < 0.01) || (sin(p.y*50.) > -0.01 && sin(p.y*50.) < 0.01)){
-                        r = starColor[0] + (d/6.);
-                        g = starColor[1] + (d/6.);
-                        b = starColor[2] + (d/6.);
+        if(targetIndex == 0){
+            {# Solar Target Circle #}
+            if(d > 0.15 && d < 0.16){
+                r= starColor[0];
+                g= starColor[1];
+                b= starColor[2];
+            }
+        }
+
+        if(showGrid == true) {
+            {# Grid Lines Bold #}
+            if((sin(p.x*250.) > -0.05 && sin(p.x*250.) < 0.05) || (sin(p.y*250.) > -0.05 && sin(p.y*250.) < 0.05)){
+                r = starColor[0]*0.8 - (d/4.);
+                g = starColor[1]*0.8 - (d/4.);
+                b = starColor[2]*0.8 - (d/4.);
+            }
+            {# Grid Lines Main #}
+            if((sin(p.x*50.) > -0.01 && sin(p.x*50.) < 0.01) || (sin(p.y*50.) > -0.01 && sin(p.y*50.) < 0.01)){
+                r = starColor[0] + (d/6.);
+                g = starColor[1] + (d/6.);
+                b = starColor[2] + (d/6.);
+            }
+        }
+
+        {# Planets #}
+        if(showOrbits == true) {
+            for(int i=0;i<9;i++){
+                {# Orbits #}
+                float t = planetRadii[i]/3.;
+                float plx = planetPositionsX[i]/5000.;
+                float ply = planetPositionsY[i]/5000.;
+                float p1 = plx - p.x;
+                float p2 = ply - p.y;
+                float pld = sqrt(p1*p1 + p2*p2)*20.;
+                float c = sin(pld*4.-timer*240.);
+
+                if(d*1260. + t > planetOrbitalDistances[i] && d*1260. - t < planetOrbitalDistances[i]){
+                    if(c > 0.3) {
+                        r = r/5. + planetColorsR[i]*c;
+                        g = g/5. + planetColorsG[i]*c;
+                        b = b/5. + planetColorsB[i]*c;
+                    } else {
+                        r = r/5. + planetColorsR[i]/5.;
+                        g = g/5. + planetColorsG[i]/5.;
+                        b = b/5. + planetColorsB[i]/5.;
                     }
                 }
 
-                {# Planets #}
-                if(showOrbits == true) {
-                    for(int i=0;i<9;i++){
-                        {# Orbits #}
-                        float t = planetRadii[i]/3.;
-                        float plx = planetPositionsX[i]/5000.;
-                        float ply = planetPositionsY[i]/5000.;
-                        float p1 = plx - p.x;
-                        float p2 = ply - p.y;
-                        float pld = sqrt(p1*p1 + p2*p2)*20.;
-                        float c = sin(pld*4.-timer*240.);
-
-                        if(d*1260. + t > planetOrbitalDistances[i] && d*1260. - t < planetOrbitalDistances[i]){
-                            if(c > 0.3) {
-                                r = r/5. + planetColorsR[i]*c;
-                                g = g/5. + planetColorsG[i]*c;
-                                b = b/5. + planetColorsB[i]*c;
-                            } else {
-                                r = r/5. + planetColorsR[i]/5.;
-                                g = g/5. + planetColorsG[i]/5.;
-                                b = b/5. + planetColorsB[i]/5.;
-                            }
-                        }
-
-                        {# Shadow #}
-                        if(pld < planetRadii[i]/150.){
-                            r= planetColorsR[i]/5. + r/5.;
-                            g= planetColorsG[i]/5. + g/5.;
-                            b= planetColorsB[i]/5. + b/5.;
-                        }
+                {# Shadow #}
+                if(pld < planetRadii[i]/150.){
+                    r= planetColorsR[i]/5. + r/5.;
+                    g= planetColorsG[i]/5. + g/5.;
+                    b= planetColorsB[i]/5. + b/5.;
+                }
+                if(targetIndex == i+1){
+                    {# Circle #}
+                    if(pld < planetRadii[i]/150. && pld >= planetRadii[i]/170.){
+                        r= planetColorsR[i];
+                        g= planetColorsG[i];
+                        b= planetColorsB[i];
                     }
                 }
+            }
+        }
 
-                if (b < 0.072) b = 0.072;
-				gl_FragColor = vec4(r, g, b, a);
-			}
-
-
+        if (b < 0.072) b = 0.072;
+        gl_FragColor = vec4(r, g, b, a);
+    }
 
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
