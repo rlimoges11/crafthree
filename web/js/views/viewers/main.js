@@ -33,6 +33,10 @@ var engine = function () {
         engine.container = document.createElement('div');
         document.body.appendChild(engine.container);
 
+        // Append GUI
+        engine.gui = new dat.GUI({width: 350});
+
+
         // Ambient light
         engine.scene.add(new THREE.AmbientLight(0x333333));
         engine.scene.children[0].name = "Ambient light";
@@ -88,23 +92,12 @@ var engine = function () {
         engine.scene.add(engine.shaderMesh);
 
 
+
         // Particle System
         engine.particleSystem = new THREE.GPUParticleSystem({
             maxParticles: 250000
         });
         engine.scene.add(engine.particleSystem);
-
-        // Append GUI
-        engine.gui = new dat.GUI({width: 350});
-        engine.gui.add(engine.emitters["star"].options, "velocityRandomness", 0, 3);
-        engine.gui.add(engine.emitters["star"].options, "positionRandomness", 0, 3);
-        engine.gui.add(engine.emitters["star"].options, "size", 1, 20);
-        engine.gui.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
-        engine.gui.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
-        engine.gui.add(engine.emitters["star"].options, "lifetime", .1, 100);
-        engine.gui.add(engine.emitters["star"].options, "turbulence", 0, 1);
-        engine.gui.add(engine.emitters["star"].spawner, "spawnRate", 10, 10000);
-        engine.gui.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
 
 
         // Append Renderer
@@ -273,6 +266,18 @@ var engine = function () {
                 engine.scene.add(starlight);
 
 
+                // engine.gui.add(engine.emitters["star"].options, "velocityRandomness", 0, 3);
+                // engine.gui.add(engine.emitters["star"].options, "positionRandomness", 0, 3);
+                // engine.gui.add(engine.emitters["star"].options, "size", 1, 20);
+
+                // Options
+                engine.gui.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
+                engine.gui.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
+                engine.gui.add(engine.emitters["star"].options, "lifetime", .1, 100);
+                engine.gui.add(engine.emitters["star"].options, "turbulence", 0, 1);
+                engine.gui.add(engine.emitters["star"].spawner, "spawnRate", 50, 600);
+                engine.gui.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
+
                 // Default targeted
                 engine.targetObj(obj);
                 break;
@@ -283,9 +288,12 @@ var engine = function () {
     engine.targetObj = function (obj) {
         if (obj) {
             engine.scanTarget = obj;
+
         } else {
             engine.scanTarget = null;
         }
+
+
     };
 
     window.addEventListener('resize', onWindowResize, false);
