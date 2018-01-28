@@ -129,7 +129,12 @@ var engine = function () {
                 if (obj.objType == "planet") {
                     var x = Math.sin(ii + (ii + obj.options.orbitalVelocity / 100) * -engine.timer) * obj.orbitalDistance;
                     var z = Math.cos(ii + (ii + obj.options.orbitalVelocity / 100) * -engine.timer) * obj.orbitalDistance;
-                    obj.position.set(x, -500 + obj.orbitalDistance / 5, z);
+
+                    if (engine.shaderMesh.material.uniforms.showWarp.value) {
+                        obj.position.set(x, -500 + obj.orbitalDistance / 5, z);
+                    } else {
+                        obj.position.set(x, 0, z);
+                    }
                     engine.planetPositionsX[ii] = x;
                     engine.planetPositionsY[ii] = 0 - z;
                     obj.rotateY(-0.01);

@@ -22,31 +22,35 @@
         varying vec2 vUv;
         varying vec3 vPos;
         uniform float timer;
+        uniform bool showWarp;
         uniform float planetRadii[9];
         uniform float planetPositionsX[9], planetPositionsY[9];
 
         void main(void){
+
             vUv = uv;
             vec2 p = -1.0 + 2.0 * vUv;
             float d = sin(sqrt(((p.x*p.x) + (p.y*p.y))));
 
-            {# Sun #}
-            vec3 newPos = position + vec3(0, 0, d*1000.0 - 500.0);
+            if(showWarp == true) {
+                {# Sun #}
+                vec3 newPos = position + vec3(0, 0, d*1000.0 - 500.0);
 
-            {# Orbits #}
-            for(int i=0;i<9;i++){
-                float plx = planetPositionsX[i] / 5000.;
-                float ply = planetPositionsY[i] / 5000.;
-                float p1 = (plx-p.x);
-                float p2 = (ply-p.y);
-                float pld = (p1*p1+p2*p2) * 80.;
-                if(pld < planetRadii[i] / 200. ){
-                    newPos = newPos + vec3(0,0,(pld * planetRadii[i]*8. -planetRadii[i]*4. ));
+                {# Orbits #}
+                for(int i=0;i<9;i++){
+                    float plx = planetPositionsX[i] / 5000.;
+                    float ply = planetPositionsY[i] / 5000.;
+                    float p1 = (plx-p.x);
+                    float p2 = (ply-p.y);
+                    float pld = (p1*p1+p2*p2) * 80.;
+                    if(pld < planetRadii[i] / 200. ){
+                        newPos = newPos + vec3(0,0,(pld * planetRadii[i]*8. -planetRadii[i]*4. ));
+                    }
                 }
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0 );
+            } else {
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
             }
-
-            vPos = newPos;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0 );
         }
 
 

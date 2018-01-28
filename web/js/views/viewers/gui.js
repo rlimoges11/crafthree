@@ -7,6 +7,13 @@ engine.appendGui = function () {
     var showWarp = engine.optionsFolder.add(engine.options, 'showWarp');
     showWarp.onChange(function () {
         engine.shaderMesh.material.uniforms.showWarp.value = engine.options.showWarp;
+        if (engine.options.showWarp) {
+            engine.star.position.setY(-350);
+            engine.emitters["star"].options.position.y = -350;
+        } else {
+            engine.star.position.setY(-0);
+            engine.emitters["star"].options.position.y = 0;
+        }
     });
     var showGrid = engine.optionsFolder.add(engine.options, 'showGrid');
     showGrid.onChange(function () {
