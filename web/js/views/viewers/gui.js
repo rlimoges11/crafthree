@@ -4,11 +4,18 @@ engine.appendGui = function () {
 
     // Engine Options Folder
     engine.optionsFolder = engine.gui.addFolder("Options");
+    var showWarp = engine.optionsFolder.add(engine.options, 'showWarp');
+    showWarp.onChange(function () {
+        engine.shaderMesh.material.uniforms.showWarp.value = engine.options.showWarp;
+    });
     var showGrid = engine.optionsFolder.add(engine.options, 'showGrid');
     showGrid.onChange(function () {
         engine.shaderMesh.material.uniforms.showGrid.value = engine.options.showGrid;
     });
-    engine.optionsFolder.add(engine.options, 'showOrbits');
+    var showOrbits = engine.optionsFolder.add(engine.options, 'showOrbits');
+    showOrbits.onChange(function () {
+        engine.shaderMesh.material.uniforms.showOrbits.value = engine.options.showOrbits;
+    });
 };
 
 
@@ -16,8 +23,6 @@ engine.targetObj = function (obj) {
     if (obj == engine.scanTarget) {
         return null;
     } else {
-        // Remove object-specific gui folders
-
 
         if (obj) {
             engine.untarget();
@@ -29,7 +34,6 @@ engine.targetObj = function (obj) {
                     engine.removeFolders();
                     if (obj.objType == "star") {
                         if (!engine.starFolder) {
-
                             engine.starFolder = engine.gui.addFolder("Star");
                             engine.starFolder.add(obj.options, "radius", 0, 25);
                             engine.starFolder.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
@@ -45,6 +49,7 @@ engine.targetObj = function (obj) {
                     if (obj.objType == "planet") {
                         if (!engine.planetFolder) {
                             engine.planetFolder = engine.gui.addFolder("Planet");
+                            engine.planetFolder.add(obj.options, "color"); // onchange required
                             engine.planetFolder.add(obj.options, "radius", 10, 100); // onchange required
                             engine.planetFolder.add(obj.options, "orbitalVelocity", 10, 100); // onchange required
                             engine.planetFolder.open();
@@ -65,9 +70,7 @@ engine.untarget = function () {
 };
 
 engine.removeFolders = function () {
-    if (engine.scanTarget) {
-        var objType = engine.scanTarget.objType;
-    }
+    // Remove object-specific gui folders
     if (engine.planetFolder) {
         engine.gui.removeFolder(engine.planetFolder);
         engine.planetFolder = null;

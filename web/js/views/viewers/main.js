@@ -27,6 +27,7 @@ var engine = function () {
         engine.options = {};
         engine.options.showOrbits = true;
         engine.options.showGrid = true;
+        engine.options.showWarp = true;
 
         // Settings
         engine.gridVisible = false;
@@ -65,6 +66,8 @@ var engine = function () {
         // Shader constants
         engine.uniforms = {
             showGrid: {value: true},
+            showOrbits: {value: true},
+            showWarp: {value: true},
             planetOrbitalDistances: {type: "f", value: engine.planetOrbitalDistances},
             planetRadii: {type: "f", value: engine.planetRadii},
             planetColorsR: {value: engine.planetColorsR},
@@ -208,7 +211,7 @@ var engine = function () {
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 obj.targetable = true;
-                obj.options = {"radius": data.radius};
+                obj.options = {"radius": data.radius, "color": data.color};
                 obj.orbitalDistance = data.orbitalDistance;
                 obj.options.orbitalVelocity = data.orbitalVelocity;
                 var d = Math.sin(obj.orbitalDistance);
