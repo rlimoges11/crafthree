@@ -34,7 +34,7 @@ var engine = function () {
         document.body.appendChild(engine.container);
 
         // Ambient light
-        engine.scene.add(new THREE.AmbientLight(0x666666));
+        engine.scene.add(new THREE.AmbientLight(0x333333));
         engine.scene.children[0].name = "Ambient light";
 
         // Main Camera
@@ -172,7 +172,6 @@ var engine = function () {
             }
         }
 
-
         // Stats
         engine.stats.update();
 
@@ -181,13 +180,15 @@ var engine = function () {
         engine.renderer.render(engine.scene, engine.camera);
 
         // Scan Cam
-        engine.scanCamera.lookAt(engine.scanTarget.position);
-        engine.scanCamera.position.setX(engine.scanTarget.position.x);
-        engine.scanCamera.position.setY(engine.scanTarget.position.y);
-        engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.radius * 3 );
+        if (engine.scanTarget) {
+            engine.scanCamera.lookAt(engine.scanTarget.position);
+            engine.scanCamera.position.setX(engine.scanTarget.position.x);
+            engine.scanCamera.position.setY(engine.scanTarget.position.y);
+            engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.radius * 3);
 
-        engine.renderer.setViewport(window.innerWidth - 365, 50, 350, 250);
-        engine.renderer.render(engine.scene, engine.scanCamera);
+            engine.renderer.setViewport(window.innerWidth - 365, 50, 350, 250);
+            engine.renderer.render(engine.scene, engine.scanCamera);
+        }
     };
 
     engine.addObj = function (idx) {
@@ -246,7 +247,7 @@ var engine = function () {
                 // Star Particle System
                 engine.emitters["star"] = {};
                 engine.emitters["star"].options = {
-                    position: new THREE.Vector3(0, -350, 0),
+                    position: new THREE.Vector3(0, engine.star.position.y, 0),
                     positionRandomness: 10,
                     velocity: new THREE.Vector3(),
                     velocityRandomness: 3,
@@ -266,6 +267,12 @@ var engine = function () {
                     timeScale: 4
                 };
 
+                // Star light
+                var starlight = new THREE.PointLight(engine.star.material.color);
+                starlight.name = "starlight";
+                engine.scene.add(starlight);
+
+
                 // Default targeted
                 engine.targetObj(obj);
                 break;
@@ -274,8 +281,11 @@ var engine = function () {
     };
 
     engine.targetObj = function (obj) {
-        engine.scanTarget = obj;
-
+        if (obj) {
+            engine.scanTarget = obj;
+        } else {
+            engine.scanTarget = null;
+        }
     };
 
     window.addEventListener('resize', onWindowResize, false);
@@ -295,12 +305,18 @@ function onWindowResize() {
 }
 
 function onMouseDown(event) {
+
     if (engine) {
-        if (engine.intersects.length > 0) {
-            engine.targetObj(engine.intersects[0].object);
+        if (event.button == 0) {
+            if (engine.intersects.length > 0) {
+                engine.targetObj(engine.intersects[0].object);
+            } else {
+                engine.targetObj();
+            }
         }
     }
 }
+
 function onMouseMove(event) {
     if (engine) {
         engine.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
