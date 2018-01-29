@@ -58,7 +58,11 @@ engine.targetObj = function (obj) {
                         if (!engine.planetFolder) {
                             engine.planetFolder = engine.gui.addFolder("Planet");
                             engine.planetFolder.add(obj.options, "color"); // onchange required
-                            engine.planetFolder.add(obj.options, "radius", 10, 100); // onchange required
+                            var radius = engine.planetFolder.add(obj.options, "radius", 10, 100); // onchange required
+                            radius.onChange(function () {
+                                obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);
+                                engine.shaderMesh.material.uniforms.planetRadii.value[obj.shaderIndex] = obj.options.radius;
+                            });
                             engine.planetFolder.add(obj.options, "orbitalVelocity", 10, 100); // onchange required
                             engine.planetFolder.open();
                         }

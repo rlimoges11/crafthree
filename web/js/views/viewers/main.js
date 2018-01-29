@@ -81,12 +81,12 @@ var engine = function () {
         };
 
         // ShaderMesh
-        var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 200, 200);
+        var geometry = new THREE.PlaneGeometry(engine.gridSize, engine.gridSize, 100, 100);
         var material = new THREE.ShaderMaterial({
             uniforms: engine.uniforms,
             vertexShader: document.getElementById('vertexShader').textContent,
             fragmentShader: document.getElementById('fragmentShader').textContent,
-            opacity: 0.25,
+            // opacity: 0.25,
             transparent: true,
             side: THREE.DoubleSide
         });
@@ -130,7 +130,9 @@ var engine = function () {
                 if (obj.objType == "planet") {
                     var x = Math.sin(ii + (ii + obj.options.orbitalVelocity / 100) * -engine.timer) * obj.orbitalDistance;
                     var z = Math.cos(ii + (ii + obj.options.orbitalVelocity / 100) * -engine.timer) * obj.orbitalDistance;
-
+                    if (!obj.shaderIndex) {
+                        obj.shaderIndex = ii;
+                    }
                     if (engine.shaderMesh.material.uniforms.showWarp.value) {
                         obj.position.set(x, -500 + obj.orbitalDistance / 5, z);
                     } else {
@@ -203,7 +205,7 @@ var engine = function () {
         switch (data.type) {
             case "planet": {
                 // Planet Object
-                var geometry = new THREE.SphereGeometry(data.radius, 32, 32);
+                var geometry = new THREE.SphereGeometry(1, 32, 32);
                 if (data.texture) {
                     data.texture = "/" + data.texture;
                     var texture = new THREE.TextureLoader().load(data.texture);
@@ -216,6 +218,7 @@ var engine = function () {
                 }
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
+                obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
                 obj.options = {"radius": data.radius, "color": data.color};
                 obj.orbitalDistance = data.orbitalDistance;
@@ -282,7 +285,6 @@ var engine = function () {
         }
     };
 
-
     window.addEventListener('resize', onWindowResize, false);
     window.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('mousedown', onMouseDown, false);
@@ -300,7 +302,6 @@ function onWindowResize() {
 }
 
 function onMouseDown(event) {
-
     if (engine) {
         if (event.button == 0) {
             if (engine.intersects.length > 0) {
