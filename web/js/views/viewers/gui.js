@@ -57,7 +57,12 @@ engine.targetObj = function (obj) {
                     if (obj.objType == "planet") {
                         if (!engine.planetFolder) {
                             engine.planetFolder = engine.gui.addFolder("Planet");
-                            engine.planetFolder.add(obj.options, "color"); // onchange required
+                            var planetColor = engine.planetFolder.addColor(obj.options, "color", 0, 1);
+                            planetColor.onChange(function (val) {
+                                obj.material.color.r = val.r / 256;
+                                obj.material.color.g = val.g / 256;
+                                obj.material.color.b = val.b / 256;
+                            });
                             var radius = engine.planetFolder.add(obj.options, "radius", 10, 100); // onchange required
                             radius.onChange(function () {
                                 obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);
