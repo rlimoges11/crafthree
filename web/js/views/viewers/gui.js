@@ -43,21 +43,37 @@ engine.targetObj = function (obj) {
                     if (obj.objType == "star") {
                         if (!engine.starFolder) {
                             engine.starFolder = engine.gui.addFolder("Star");
-                            engine.starFolder.add(obj.options, "radius", 0, 25);
-                            engine.starFolder.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
-                            engine.starFolder.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
-                            engine.starFolder.add(engine.emitters["star"].options, "lifetime", .1, 100);
-                            engine.starFolder.add(engine.emitters["star"].options, "turbulence", 0, 1);
-                            engine.starFolder.add(engine.emitters["star"].spawner, "spawnRate", 50, 600);
-                            engine.starFolder.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
+                            var starColor = engine.starFolder.addColor(obj.options, "color");
+                            starColor.onChange(function (val) {
+                                obj.material.color.r = val.r / 256;
+                                obj.material.color.g = val.g / 256;
+                                obj.material.color.b = val.b / 256;
+
+                                obj.material.starColor = obj.material.color;
+                            });
+                            var radius = engine.starFolder.add(obj.options, "radius", 10, 100);
+                            radius.onChange(function () {
+                                obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);
+                                engine.shaderMesh.material.uniforms.starRadius.value = obj.options.radius;
+                            });
                             engine.starFolder.open();
+                        }
+                        if (!engine.starParticleFolder) {
+                            engine.starParticleFolder = engine.gui.addFolder("Star Particles");
+                            engine.starParticleFolder.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
+                            engine.starParticleFolder.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
+                            engine.starParticleFolder.add(engine.emitters["star"].options, "lifetime", .1, 100);
+                            engine.starParticleFolder.add(engine.emitters["star"].options, "turbulence", 0, 1);
+                            engine.starParticleFolder.add(engine.emitters["star"].spawner, "spawnRate", 50, 600);
+                            engine.starParticleFolder.add(engine.emitters["star"].spawner, "timeScale", -5, 5);
+                            engine.starParticleFolder.open();
                         }
                     }
 
                     if (obj.objType == "planet") {
                         if (!engine.planetFolder) {
                             engine.planetFolder = engine.gui.addFolder("Planet");
-                            var planetColor = engine.planetFolder.addColor(obj.options, "color", 0, 1);
+                            var planetColor = engine.planetFolder.addColor(obj.options, "color");
                             planetColor.onChange(function (val) {
                                 obj.material.color.r = val.r / 256;
                                 obj.material.color.g = val.g / 256;
@@ -95,6 +111,10 @@ engine.removeFolders = function () {
     if (engine.starFolder) {
         engine.gui.removeFolder(engine.starFolder);
         engine.starFolder = null;
+    }
+    if (engine.starParticleFolder) {
+        engine.gui.removeFolder(engine.starParticleFolder);
+        engine.starParticleFolder = null;
     }
 };
 

@@ -223,7 +223,6 @@ var engine = function () {
                 obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}};
                 obj.orbitalDistance = data.orbitalDistance;
                 obj.options.orbitalVelocity = data.orbitalVelocity;
-                var d = Math.sin(obj.orbitalDistance);
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 obj.objType = "planet";
 
@@ -241,13 +240,14 @@ var engine = function () {
             }
             case "star": {
                 // Star Object
-                var geometry = new THREE.SphereGeometry(data.radius / 3, 32, 32);
+                var geometry = new THREE.SphereGeometry(1, 32, 32);
                 var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
+                obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
                 obj.objType = "star";
-                obj.options = {"radius": data.radius};
+                obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}};
                 engine.star = obj;
                 engine.star.position.setY(-350);
                 obj.targetIndex = 0;
