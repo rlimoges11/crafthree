@@ -54,6 +54,9 @@
         }
 
 
+
+
+
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
     varying vec2 vUv;
@@ -150,46 +153,76 @@
                     b= planetColorsB[i]/5. + b/5.;
                 }
                 if(targetIndex == i+1){
-                    {# Target Shadow #}
-                    if(pld > planetRadii[i]/100. && pld < planetRadii[i]/100. + 1.00){
-                        r= planetColorsR[i]/10. + r*0.8;
-                        g= planetColorsG[i]/10. + g*0.8;
-                        b= planetColorsB[i]/10. + b*0.8;
-                    }
 
-                    {# Target Circle #}
-                    if(pld > planetRadii[i]/100. + 1.13 && pld < planetRadii[i]/100. + 1.15){
-                        r= planetColorsR[i];
-                        g= planetColorsG[i];
-                        b= planetColorsB[i];
-                    }
-                    if(pld > planetRadii[i]/100. +1.0  && pld < planetRadii[i]/100. + 1.02){
-                        r= planetColorsR[i];
-                        g= planetColorsG[i];
-                        b= planetColorsB[i];
-                    }
-                    if(pld > planetRadii[i]/100.  && pld < planetRadii[i]/100. + 0.02){
-                        r= planetColorsR[i];
-                        g= planetColorsG[i];
-                        b= planetColorsB[i];
-                    }
+                    float aa = 1.75;
+
+                    {# Planet color #}
+                    float r1 = planetColorsR[i]*(aa *2.) - pld /10. + r;
+                    float g1 = planetColorsG[i]*(aa *2.) - pld /10. + g;
+                    float b1 = planetColorsB[i]*(aa *2.) - pld /10. + b;
+                    float a1 = 0.5;
+
+                    {# Planet color translucid #}
+                    float r2 = planetColorsR[i]/aa + r*aa;
+                    float g2 = planetColorsG[i]/aa + g*aa;
+                    float b2 = planetColorsB[i]/aa + b*aa;
+                    float a2 = 0.5;
+
+
                     if(pld > planetRadii[i]/150.){
+
+                        {# orbit area #}
+                        if(pld > planetRadii[i]/100. && pld < planetRadii[i]/100. + 1.00){
+                            r= r2;
+                            g= g2;
+                            b= b2;
+                            a = a2;
+                        }
+
+                        {# 1st Target Circle Border #}
                         if(pld < planetRadii[i]/150. + 0.02){
-                            r= planetColorsR[i];
-                            g= planetColorsG[i];
-                            b= planetColorsB[i];
+                            r= r1;
+                            g= g1;
+                            b= b1;
+                            a = a1;
+                        }
+
+                        {# 2nd Targed Circle Border #}
+                        if(pld > planetRadii[i]/100. + 0.01  && pld < planetRadii[i]/100. + 0.03){
+                            r= r1;
+                            g= g1;
+                            b= b1;
+                            a = a1;
+                        }
+
+                        {# 3rd Targed Circle Border #}
+                        if(pld > planetRadii[i]/100. +1.0  && pld < planetRadii[i]/100. + 1.02){
+                            r= r1;
+                            g= g1;
+                            b= b1;
+                            a = a1;
+                        }
+
+                        {# 4th Target Circle Border #}
+                        if(pld > planetRadii[i]/100. + 1.13 && pld < planetRadii[i]/100. + 1.15){
+                            r= r1;
+                            g= g1;
+                            b= b1;
+                            a = a1;
                         }
 
                         {# Target Lines #}
                         if( p.x > plx -0.001 && p.x < plx + 0.001 ){
-                            r= planetColorsR[i];
-                            g= planetColorsG[i];
-                            b= planetColorsB[i];
+                            r= r1;
+                            g= g1;
+                            b= b1;
+                            a = a1;
                         }
                         if( p.y > ply -0.001 && p.y < ply + 0.001 ){
-                            r= planetColorsR[i];
-                            g= planetColorsG[i];
-                            b= planetColorsB[i];
+                            r= r1;
+                            g= g1;
+                            b= b1;
+                            a = a1;
                         }
                     }
                 }

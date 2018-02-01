@@ -25,12 +25,10 @@ engine.appendGui = function () {
     });
 };
 
-
 engine.targetObj = function (obj) {
     if (obj == engine.scanTarget) {
         return null;
     } else {
-
         if (obj) {
             engine.untarget();
             engine.scanTarget = obj;
@@ -48,7 +46,6 @@ engine.targetObj = function (obj) {
                                 obj.material.color.r = val.r / 256;
                                 obj.material.color.g = val.g / 256;
                                 obj.material.color.b = val.b / 256;
-
                                 obj.material.starColor = obj.material.color;
                             });
                             var radius = engine.starFolder.add(obj.options, "radius", 10, 100);
@@ -78,6 +75,9 @@ engine.targetObj = function (obj) {
                                 obj.material.color.r = val.r / 256;
                                 obj.material.color.g = val.g / 256;
                                 obj.material.color.b = val.b / 256;
+                                engine.shaderMesh.material.uniforms.planetColorsR.value[obj.shaderIndex] = obj.material.color.r;
+                                engine.shaderMesh.material.uniforms.planetColorsG.value[obj.shaderIndex] = obj.material.color.g;
+                                engine.shaderMesh.material.uniforms.planetColorsB.value[obj.shaderIndex] = obj.material.color.b;
                             });
                             var radius = engine.planetFolder.add(obj.options, "radius", 10, 100); // onchange required
                             radius.onChange(function () {
