@@ -27,10 +27,9 @@
         uniform float planetPositionsX[9], planetPositionsY[9];
 
         void main(void){
-
             vUv = uv;
             vec2 p = -1.0 + 2.0 * vUv;
-            float d = sin(sqrt(((p.x*p.x) + (p.y*p.y))));
+            float d = sin(sqrt((p.x*p.x + p.y*p.y)));
 
             if(showWarp == true) {
                 {# Sun #}
@@ -43,19 +42,15 @@
                     float p1 = (plx-p.x);
                     float p2 = (ply-p.y);
                     float pld = (p1*p1+p2*p2) * 80.;
-                    if(pld < planetRadii[i] / 200. ){
-                        newPos = newPos + vec3(0,0,(pld * planetRadii[i]*8. -planetRadii[i]*4. ));
+                    if(pld < planetRadii[i] / 200.){
+                        newPos = newPos + vec3(0,0,(pld * planetRadii[i]*8. - planetRadii[i]*4.));
                     }
                 }
-                gl_Position = projectionMatrix * modelViewMatrix * vec4( newPos, 1.0 );
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
             } else {
-                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
         }
-
-
-
-
 
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
@@ -104,7 +99,6 @@
                     b= starColor[2];
                 }
             }
-
         }
 
         if(showGrid == true) {
@@ -126,13 +120,13 @@
         if(showOrbits == true) {
             for(int i=0;i<9;i++){
                 {# Orbits #}
-                float t = planetRadii[i]/3.;
+                float t = planetRadii[i]/5.;
                 float plx = planetPositionsX[i]/5000.;
                 float ply = planetPositionsY[i]/5000.;
                 float p1 = plx - p.x;
                 float p2 = ply - p.y;
                 float pld = sqrt(p1*p1 + p2*p2)*20.;
-                float c = sin(pld*4.-timer*240.);
+                float c = sin(pld*4. - timer*240.);
 
                 if(d*1260. + t > planetOrbitalDistances[i] && d*1260. - t < planetOrbitalDistances[i]){
                     if(c > 0.3) {
@@ -148,34 +142,31 @@
 
                 {# Shadow #}
                 if(pld < planetRadii[i]/150.){
-                    r= planetColorsR[i]/5. + r/5.;
-                    g= planetColorsG[i]/5. + g/5.;
-                    b= planetColorsB[i]/5. + b/5.;
+                    r = planetColorsR[i]/5. + r/5.;
+                    g = planetColorsG[i]/5. + g/5.;
+                    b = planetColorsB[i]/5. + b/5.;
                 }
                 if(targetIndex == i+1){
-
                     float aa = 1.75;
 
                     {# Planet color #}
-                    float r1 = planetColorsR[i]*(aa *2.) - pld /10. + r;
-                    float g1 = planetColorsG[i]*(aa *2.) - pld /10. + g;
-                    float b1 = planetColorsB[i]*(aa *2.) - pld /10. + b;
+                    float r1 = planetColorsR[i]*aa*2. - pld/20. + r;
+                    float g1 = planetColorsG[i]*aa*2. - pld/20. + g;
+                    float b1 = planetColorsB[i]*aa*2. - pld/20. + b;
                     float a1 = 0.5;
 
                     {# Planet color translucid #}
                     float r2 = planetColorsR[i]/aa + r*aa;
                     float g2 = planetColorsG[i]/aa + g*aa;
                     float b2 = planetColorsB[i]/aa + b*aa;
-                    float a2 = 0.5;
-
+                    float a2 = 0.25;
 
                     if(pld > planetRadii[i]/150.){
-
-                        {# orbit area #}
+                        {# warped area #}
                         if(pld > planetRadii[i]/100. && pld < planetRadii[i]/100. + 1.00){
-                            r= r2;
-                            g= g2;
-                            b= b2;
+                            r = r2;
+                            g = g2;
+                            b = b2;
                             a = a2;
                         }
 
@@ -188,7 +179,7 @@
                         }
 
                         {# 2nd Targed Circle Border #}
-                        if(pld > planetRadii[i]/100. + 0.01  && pld < planetRadii[i]/100. + 0.03){
+                        if(pld > planetRadii[i]/100. - 0.01  && pld < planetRadii[i]/100. - 0.03){
                             r= r1;
                             g= g1;
                             b= b1;
@@ -212,13 +203,7 @@
                         }
 
                         {# Target Lines #}
-                        if( p.x > plx -0.001 && p.x < plx + 0.001 ){
-                            r= r1;
-                            g= g1;
-                            b= b1;
-                            a = a1;
-                        }
-                        if( p.y > ply -0.001 && p.y < ply + 0.001 ){
+                        if(( p.x > plx -0.001 && p.x < plx + 0.001 )||( p.y > ply -0.001 && p.y < ply + 0.001 )){
                             r= r1;
                             g= g1;
                             b= b1;
@@ -230,21 +215,18 @@
         }
 
         if (b < 0.072) b = 0.072;
+        if (a < 0.075) b = 0.075;
         gl_FragColor = vec4(r, g, b, a);
     }
 
-
-
     </script>
     <script src="/js/vendors/threejs/three.min.js"></script>
-
     <script src="/js/vendors/threejs/libs/dat.gui.min.js"></script>
     <script src="/js/vendors/threejs/libs/stats.min.js"></script>
     <script src="/js/vendors/threejs/libs/Detector.js"></script>
-
     <script src="/js/vendors/threejs/libs/GPUParticleSystem.js"></script>
-    <script src="/js/vendors/threejs/systemControls.js"></script>
 
+    <script src="/js/vendors/threejs/systemControls.js"></script>
     <script src="/js/views/viewers/main.js"></script>
     <script src="/js/views/viewers/gui.js"></script>
 {% endblock %}
