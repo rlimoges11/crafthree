@@ -57,6 +57,7 @@ engine.targetObj = function (obj) {
                         }
                         if (!engine.starParticleFolder) {
                             engine.starParticleFolder = engine.gui.addFolder("Star Particles");
+                            engine.starParticleFolder.addColor(engine.emitters["star"].options, "color");
                             engine.starParticleFolder.add(engine.emitters["star"].options, "sizeRandomness", 0, 25);
                             engine.starParticleFolder.add(engine.emitters["star"].options, "colorRandomness", 0, 1);
                             engine.starParticleFolder.add(engine.emitters["star"].options, "lifetime", .1, 100);

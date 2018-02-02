@@ -247,7 +247,7 @@ var engine = function () {
                 obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
                 obj.objType = "star";
-                obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}};
+                obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}, "particleColor": {r: 0, g: 0, b: 0}};
                 engine.star = obj;
                 engine.star.position.setY(-350);
                 obj.targetIndex = 0;
@@ -260,12 +260,13 @@ var engine = function () {
                     positionRandomness: 10,
                     velocity: new THREE.Vector3(),
                     velocityRandomness: 3,
-                    color: engine.star.material.color,
-                    colorRandomness: 0.6,
+                    particleColor: data.color,
+                    color: data.color,
+                    colorRandomness: 0.1,
                     turbulence: 0.1,
-                    lifetime: 25,
+                    lifetime: 40,
                     size: 5,
-                    sizeRandomness: 10
+                    sizeRandomness: 25
                 };
 
                 // Star Particle Spawner

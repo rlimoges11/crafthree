@@ -7,15 +7,6 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-{% block ui %}
-    <div id="editor">
-        {% if entry is defined %}
-            {% if entry.isEditable() and not craft.app.request.isLivePreview %}
-                <a href="{{ entry.cpEditUrl }}" class="editorLink">Edit entry</a>
-            {% endif %}
-        {% endif %}
-    </div>
-{% endblock %}
 {% block scene %}{% endblock %}
 {% block scripts %}
     <script id="vertexShader" type="x-shader/x-vertex">
@@ -51,7 +42,6 @@
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
         }
-
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
     varying vec2 vUv;
@@ -59,10 +49,9 @@
     uniform bool showGrid, showOrbits;
     uniform int targetIndex;
     uniform vec3 starColor;
-    uniform float planetOrbitalDistances[9], planetRadii[9];
+    uniform float planetOrbitalDistances[9], planetRadii[9]; // TODO need to get rid of these 9's
     uniform float planetColorsR[9], planetColorsG[9], planetColorsB[9];
     uniform float planetPositionsX[9], planetPositionsY[9];
-
     float r, g, b, a, d;
 
     void main()	{
@@ -77,23 +66,23 @@
 
         if(targetIndex == 0){
             {# Solar Target Circle #}
-            if( d > 0.15 && d < 0.16 ){
+            if(d > 0.15 && d < 0.16){
                 r= starColor[0];
                 g= starColor[1];
                 b= starColor[2];
             }
-            if( d > 0.2 && d < 0.21 ){
+            if(d > 0.2 && d < 0.21){
                 r= starColor[0];
                 g= starColor[1];
                 b= starColor[2];
             }
             if(d > 0.16) {
-                if( p.x > -0.001 && p.x < 0.001 ){
+                if(p.x > -0.001 && p.x < 0.001){
                     r= starColor[0];
                     g= starColor[1];
                     b= starColor[2];
                 }
-                if( p.y > -0.001 && p.y < 0.001 ){
+                if(p.y > -0.001 && p.y < 0.001){
                     r= starColor[0];
                     g= starColor[1];
                     b= starColor[2];
@@ -215,7 +204,7 @@
         }
 
         if (b < 0.072) b = 0.072;
-        if (a < 0.075) b = 0.075;
+        if (a < 0.075) a = 0.075;
         gl_FragColor = vec4(r, g, b, a);
     }
 
