@@ -80,10 +80,14 @@ engine.targetObj = function (obj) {
                                 engine.shaderMesh.material.uniforms.planetColorsG.value[obj.shaderIndex] = obj.material.color.g;
                                 engine.shaderMesh.material.uniforms.planetColorsB.value[obj.shaderIndex] = obj.material.color.b;
                             });
-                            var radius = engine.planetFolder.add(obj.options, "radius", 10, 100); // onchange required
+                            var radius = engine.planetFolder.add(obj.options, "radius", 10, 200); // onchange required
                             radius.onChange(function () {
                                 obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);
                                 engine.shaderMesh.material.uniforms.planetRadii.value[obj.shaderIndex] = obj.options.radius;
+                            });
+                            var orbitalDistance = engine.planetFolder.add(obj, "orbitalDistance", 100, 5000); // onchange required
+                            orbitalDistance.onChange(function () {
+                                engine.shaderMesh.material.uniforms.planetOrbitalDistances.value[obj.shaderIndex] = obj.orbitalDistance;
                             });
                             engine.planetFolder.add(obj.options, "orbitalVelocity", 10, 100); // onchange required
                             engine.planetFolder.open();

@@ -220,8 +220,8 @@ var engine = function () {
                 obj.name = data.name;
                 obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
-                obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}};
                 obj.orbitalDistance = data.orbitalDistance;
+                obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}};
                 obj.options.orbitalVelocity = data.orbitalVelocity;
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 obj.objType = "planet";
