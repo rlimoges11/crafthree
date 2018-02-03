@@ -77,6 +77,7 @@ var engine = function () {
             planetPositionsX: {value: engine.planetPositionsX},
             planetPositionsY: {value: engine.planetPositionsY},
             starColor: {value: engine.star.material.color},
+            starRadius: {value: engine.star.options.radius},
             timer: {type: "f", value: engine.clock.elapsedTime / 50}
         };
 
@@ -149,7 +150,7 @@ var engine = function () {
         }
 
         // Shaders
-        engine.shaderMesh.material.uniforms.needsUpdate = true;
+        // engine.shaderMesh.material.uniforms.needsUpdate = true;
 
         // Particle Emitters
         // Star
