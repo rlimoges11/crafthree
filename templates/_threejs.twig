@@ -45,6 +45,8 @@
 
 
 
+
+
     </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
     varying vec2 vUv;
@@ -52,6 +54,7 @@
     uniform bool showGrid, showOrbits;
     uniform int targetIndex;
     uniform vec3 starColor;
+    uniform float starRadius;
     uniform float planetOrbitalDistances[9], planetRadii[9]; // TODO need to get rid of these 9's
     uniform float planetColorsR[9], planetColorsG[9], planetColorsB[9];
     uniform float planetPositionsX[9], planetPositionsY[9];
@@ -62,10 +65,10 @@
         d = sqrt(((p.x*p.x) + (p.y*p.y)))*4.0;
 
         {# Solar glow #}
-        r = starColor[0] - d;
-        g = starColor[1] - d;
-        b = 0.5 + starColor[2] - ((d/5.0)*2.0)/3.0;
-        a = (1.0 - d / 4.) / 1.75;
+        r = (starColor[0] + starRadius/150.) / (d/0.1);
+        g = (starColor[1] + starRadius/150.) / (d/0.1);
+        b = (starColor[2] + starRadius/150.) / (d/0.1) + 0.1*d;
+        a = (1.0 - d * 0.25);
 
         if(targetIndex == 0){
             {# Solar Target Circle #}
@@ -214,6 +217,8 @@
         {#if (b < 0.072) b = 0.072;#}
         gl_FragColor = vec4(r, g, b, a);
     }
+
+
 
 
 

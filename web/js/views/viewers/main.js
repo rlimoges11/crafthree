@@ -87,14 +87,12 @@ var engine = function () {
             uniforms: engine.uniforms,
             vertexShader: document.getElementById('vertexShader').textContent,
             fragmentShader: document.getElementById('fragmentShader').textContent,
-            // opacity: 0.25,
             transparent: true,
             side: THREE.DoubleSide
         });
         engine.shaderMesh = new THREE.Mesh(geometry, material);
         engine.shaderMesh.rotateX(0 - Math.PI / 2);
         engine.shaderMesh.name = "shaderMesh";
-        // engine.shaderMesh.position.set(0, -100, 0);
         engine.scene.add(engine.shaderMesh);
 
 
@@ -149,8 +147,6 @@ var engine = function () {
             }
         }
 
-        // Shaders
-        // engine.shaderMesh.material.uniforms.needsUpdate = true;
 
         // Particle Emitters
         // Star
