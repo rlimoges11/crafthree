@@ -122,12 +122,12 @@
                 float r1 = planetColorsR[i] - pld/100. + c/2.;
                 float g1 = planetColorsG[i] - pld/100. + c/2.;
                 float b1 = planetColorsB[i] - pld/100. + c/2.;
-                float a1 = a;
+                float a1 = a + 0.2;
 
                 {# Planet color translucid #}
-                float r2 = planetColorsR[i]*0.5 + r*0.5;
-                float g2 = planetColorsG[i]*0.5 + g*0.5;
-                float b2 = planetColorsB[i]*0.5 + b*0.5;
+                float r2 = planetColorsR[i]*0.2 + r*0.8;
+                float g2 = planetColorsG[i]*0.2 + g*0.8;
+                float b2 = planetColorsB[i]*0.2 + b*0.8;
                 float a2 = a1;
 
                 {# Orbits #}
@@ -177,11 +177,7 @@
                                     b= b1;
                                     a = a1;
                                 }
-
                             }
-
-
-
 
                             {# 3rd Targed Circle Border #}
                             if(pld > planetRadii[i]/100. +1.0  && pld < planetRadii[i]/100. + 1.02){
@@ -201,13 +197,13 @@
                         }
                     }
                 }
-                                {# Shadow #}
+
+                {# Shadow #}
                 if(pld < planetRadii[i]/200.){
                     r = r2;
                     g = g2;
                     b = b2;
                 }
-
             }
         }
         gl_FragColor = vec4(r, g, b, a);
