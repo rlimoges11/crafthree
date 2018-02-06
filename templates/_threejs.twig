@@ -147,7 +147,7 @@
                     {# Within target radius #}
                     if (pld < planetRadii[i]/80. + 1.2){
                         {# Target Lines #}
-                        if(( p.x > plx -0.001 && p.x < plx + 0.001 )||( p.y > ply -0.001 && p.y < ply + 0.001 ) ){
+                        if(( p.x > plx -0.001 && p.x < plx + 0.001 ) || ( p.y > ply -0.001 && p.y < ply + 0.001 ) ){
                             r = r1;
                             g = g1;
                             b = b1;
@@ -161,7 +161,6 @@
                             b= b1;
                             a = a1;
                         }
-
 
                         if(pld > planetRadii[i]/150.){
                             {# withinn warped area #}

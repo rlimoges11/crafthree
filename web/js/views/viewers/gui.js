@@ -96,10 +96,10 @@ engine.targetObj = function (obj) {
                 }
             }
         }
-        else {
-            // engine.removeFolders();
-            // engine.untarget();
-        }
+        // else {
+        //     engine.removeFolders();
+        //     engine.untarget();
+        // }
     }
 };
 
