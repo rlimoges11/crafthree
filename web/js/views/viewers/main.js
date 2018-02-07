@@ -190,7 +190,7 @@ var engine = function () {
             engine.scanCamera.position.setY(engine.scanTarget.position.y + engine.scanTarget.options.radius * 2);
             engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.options.radius * 3 - 80);
 
-            engine.renderer.setViewport(window.innerWidth - 365, 50, 350, 250);
+            engine.renderer.setViewport(window.innerWidth - 365, 20, 350, 250);
             engine.renderer.render(engine.scene, engine.scanCamera);
         }
     };
@@ -219,7 +219,7 @@ var engine = function () {
                         displacementMap: texture,
                         specularMap: texture,
                         lightMap: texture,
-                        lightMapIntensity: 0.1,
+                        lightMapIntensity: 0.2,
                         displacementScale: 0.1
                     });
                 } else {

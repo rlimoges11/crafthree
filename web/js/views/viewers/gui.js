@@ -134,4 +134,4 @@ engine.container.appendChild(engine.stats.dom);
 engine.appendGui();
 
 // Default target
-engine.targetObj(engine.scene.children[0]);
+// engine.targetObj(engine.scene.children[0]);
