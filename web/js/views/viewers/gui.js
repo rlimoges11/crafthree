@@ -4,6 +4,7 @@ engine.appendGui = function () {
 
     // Engine Options Folder
     engine.optionsFolder = engine.gui.addFolder("Options");
+    engine.optionsFolder.add(engine.options, 'timeFactor', -100, 100);
     engine.optionsFolder.add(engine.options, 'showWarp').onChange(function () {
         engine.shaderMesh.material.uniforms.showWarp.value = engine.options.showWarp;
         if (engine.options.showWarp) {

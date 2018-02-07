@@ -25,6 +25,7 @@ var engine = function () {
 
         // Engine ooptions
         engine.options = {};
+        engine.options.timeFactor = 1;
         engine.options.showOrbits = true;
         engine.options.showGrid = true;
         engine.options.showWarp = true;
@@ -127,8 +128,8 @@ var engine = function () {
             for (var i = 0; i < engine.scene.children.length; i++) {
                 var obj = engine.scene.children[i];
                 if (obj.objType == "planet") {
-                    var x = Math.sin(ii + (ii + obj.options.orbitalVelocity / 100) * -engine.timer) * obj.orbitalDistance;
-                    var z = Math.cos(ii + (ii + obj.options.orbitalVelocity / 100) * -engine.timer) * obj.orbitalDistance;
+                    var x = Math.sin(ii + (ii + obj.options.orbitalVelocity * 100) * engine.timer * (engine.options.timeFactor)/-100000) * obj.orbitalDistance;
+                    var z = Math.cos(ii + (ii + obj.options.orbitalVelocity * 100) * engine.timer * (engine.options.timeFactor)/-100000) * obj.orbitalDistance;
                     if (!obj.shaderIndex) {
                         obj.shaderIndex = ii;
                     }
@@ -186,7 +187,7 @@ var engine = function () {
         if (engine.scanTarget) {
             engine.scanCamera.lookAt(engine.scanTarget.position);
             engine.scanCamera.position.setX(engine.scanTarget.position.x);
-            engine.scanCamera.position.setY(engine.scanTarget.position.y);
+            engine.scanCamera.position.setY(engine.scanTarget.position.y + engine.scanTarget.options.radius * 2);
             engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.options.radius * 3 - 80);
 
             engine.renderer.setViewport(window.innerWidth - 365, 50, 350, 250);
@@ -202,7 +203,7 @@ var engine = function () {
         switch (data.type) {
             case "planet": {
                 // Planet Object
-                var geometry = new THREE.SphereGeometry(1, 64, 64);
+                var geometry = new THREE.SphereGeometry(1, 128, 128);
                 if (data.texture) {
                     data.texture = "/" + data.texture;
                     var texture = new THREE.TextureLoader().load(data.texture);
