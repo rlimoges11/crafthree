@@ -4,8 +4,7 @@ engine.appendGui = function () {
 
     // Engine Options Folder
     engine.optionsFolder = engine.gui.addFolder("Options");
-    var showWarp = engine.optionsFolder.add(engine.options, 'showWarp');
-    showWarp.onChange(function () {
+    engine.optionsFolder.add(engine.options, 'showWarp').onChange(function () {
         engine.shaderMesh.material.uniforms.showWarp.value = engine.options.showWarp;
         if (engine.options.showWarp) {
             engine.star.position.setY(-350);
@@ -15,12 +14,10 @@ engine.appendGui = function () {
             engine.emitters["star"].options.position.y = 0;
         }
     });
-    var showGrid = engine.optionsFolder.add(engine.options, 'showGrid');
-    showGrid.onChange(function () {
+    engine.optionsFolder.add(engine.options, 'showGrid').onChange(function () {
         engine.shaderMesh.material.uniforms.showGrid.value = engine.options.showGrid;
     });
-    var showOrbits = engine.optionsFolder.add(engine.options, 'showOrbits');
-    showOrbits.onChange(function () {
+    engine.optionsFolder.add(engine.options, 'showOrbits').onChange(function () {
         engine.shaderMesh.material.uniforms.showOrbits.value = engine.options.showOrbits;
     });
 };
@@ -41,15 +38,13 @@ engine.targetObj = function (obj) {
                     if (obj.objType == "star") {
                         if (!engine.starFolder) {
                             engine.starFolder = engine.gui.addFolder("Star");
-                            var starColor = engine.starFolder.addColor(obj.options, "color");
-                            starColor.onChange(function (val) {
+                            engine.starFolder.addColor(obj.options, "color").onChange(function (val) {
                                 obj.material.color.r = val.r / 256;
                                 obj.material.color.g = val.g / 256;
                                 obj.material.color.b = val.b / 256;
                                 obj.material.starColor = obj.material.color;
                             });
-                            var radius = engine.starFolder.add(obj.options, "radius", 10, 100);
-                            radius.onChange(function () {
+                            engine.starFolder.add(obj.options, "radius", 10, 100).onChange(function () {
                                 obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);
                                 engine.shaderMesh.material.uniforms.starRadius.value = obj.options.radius;
                             });
@@ -71,8 +66,7 @@ engine.targetObj = function (obj) {
                     if (obj.objType == "planet") {
                         if (!engine.planetFolder) {
                             engine.planetFolder = engine.gui.addFolder("Planet");
-                            var planetColor = engine.planetFolder.addColor(obj.options, "color");
-                            planetColor.onChange(function (val) {
+                            engine.planetFolder.addColor(obj.options, "color").onChange(function (val) {
                                 obj.material.color.r = val.r / 256;
                                 obj.material.color.g = val.g / 256;
                                 obj.material.color.b = val.b / 256;
@@ -83,13 +77,11 @@ engine.targetObj = function (obj) {
                             engine.planetFolder.add(obj.options, "displacementScale", -0.5, 0.5).onChange(function (val) {
                                 obj.material.displacementScale = val;
                             });
-                            var radius = engine.planetFolder.add(obj.options, "radius", 10, 200);
-                            radius.onChange(function () {
+                            engine.planetFolder.add(obj.options, "radius", 10, 200).onChange(function () {
                                 obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);
                                 engine.shaderMesh.material.uniforms.planetRadii.value[obj.shaderIndex] = obj.options.radius;
                             });
-                            var orbitalDistance = engine.planetFolder.add(obj, "orbitalDistance", 100, 5000); // onchange required
-                            orbitalDistance.onChange(function () {
+                            engine.planetFolder.add(obj, "orbitalDistance", 500, 5000).onChange(function () {
                                 engine.shaderMesh.material.uniforms.planetOrbitalDistances.value[obj.shaderIndex] = obj.orbitalDistance;
                             });
                             engine.planetFolder.add(obj.options, "orbitalVelocity", 10, 100); // onchange required

@@ -187,7 +187,7 @@ var engine = function () {
             engine.scanCamera.lookAt(engine.scanTarget.position);
             engine.scanCamera.position.setX(engine.scanTarget.position.x);
             engine.scanCamera.position.setY(engine.scanTarget.position.y);
-            engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.options.radius * 2 - 50);
+            engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.options.radius * 3 - 80);
 
             engine.renderer.setViewport(window.innerWidth - 365, 50, 350, 250);
             engine.renderer.render(engine.scene, engine.scanCamera);
@@ -209,7 +209,7 @@ var engine = function () {
                     texture.wrapS = THREE.RepeatWrapping;
                     texture.wrapT = THREE.RepeatWrapping;
                     texture.repeat.set(2, 2);
-                    var material = new THREE.MeshPhongMaterial({color: data.color, map: texture, opacity: 0.9, transparent: true, displacementMap: texture, displacementScale: 0});
+                    var material = new THREE.MeshPhongMaterial({color: data.color, map: texture, opacity: 0.95, transparent: true, displacementMap: texture, displacementScale: 0});
                 } else {
                     var material = new THREE.MeshPhongMaterial({color: data.color});
                 }
