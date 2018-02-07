@@ -40,8 +40,8 @@ var engine = function () {
         document.body.appendChild(engine.container);
 
         // Ambient light
-        engine.scene.add(new THREE.AmbientLight(0x111111));
-        engine.scene.children[0].name = "Ambient light";
+        // engine.scene.add(new THREE.AmbientLight(0x111111));
+        // engine.scene.children[0].name = "Ambient light";
 
         // Main Camera
         engine.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 12500);
@@ -203,23 +203,24 @@ var engine = function () {
         switch (data.type) {
             case "planet": {
                 // Planet Object
-                var geometry = new THREE.SphereGeometry(1, 128, 128);
+                var geometry = new THREE.SphereGeometry(1, 256, 256);
                 if (data.texture) {
                     data.texture = "/" + data.texture;
                     var texture = new THREE.TextureLoader().load(data.texture);
-                    texture.wrapS = THREE.RepeatWrapping;
-                    texture.wrapT = THREE.RepeatWrapping;
-                    texture.repeat.set(2, 2);
+                    // texture.wrapS = THREE.RepeatWrapping;
+                    // texture.wrapT = THREE.RepeatWrapping;
+                    // texture.repeat.set(1, 1);
                     var material = new THREE.MeshPhongMaterial({
                         color: data.color,
                         map: texture,
                         opacity: 0.95,
-                        shininess: 50,
+                        shininess: 30,
                         transparent: true,
                         displacementMap: texture,
-                        lightMap: texture,
                         specularMap: texture,
-                        displacementScale: 0
+                        lightMap: texture,
+                        lightMapIntensity: 0.1,
+                        displacementScale: 0.1
                     });
                 } else {
                     var material = new THREE.MeshPhongMaterial({color: data.color});
@@ -229,7 +230,7 @@ var engine = function () {
                 obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
                 obj.orbitalDistance = data.orbitalDistance;
-                obj.options = {"radius": data.radius, "color": {r: 1, g: 1, b: 1}, "displacementScale": 0};
+                obj.options = {"radius": data.radius, "color": {r: 1, g: 1, b: 1}};
                 obj.options.orbitalVelocity = data.orbitalVelocity;
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 obj.objType = "planet";

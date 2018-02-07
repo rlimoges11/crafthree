@@ -81,12 +81,13 @@ engine.targetObj = function (obj) {
                                 engine.shaderMesh.material.uniforms.planetColorsG.value[obj.shaderIndex] = obj.material.color.g;
                                 engine.shaderMesh.material.uniforms.planetColorsB.value[obj.shaderIndex] = obj.material.color.b;
                             });
-                            engine.planetFolder.add(obj.options, "displacementScale", -0.5, 0.5).onChange(function (val) {
-                                obj.material.displacementScale = val;
-                            });
+                            engine.planetFolder.add(obj.material, "displacementScale", -0.25, 0.25);
                             engine.planetFolder.add(obj.options, "radius", 10, 200).onChange(function () {
                                 obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);
                                 engine.shaderMesh.material.uniforms.planetRadii.value[obj.shaderIndex] = obj.options.radius;
+                            });
+                            engine.planetFolder.add(obj.material, "shininess", 0, 100).onChange(function () {
+
                             });
                             engine.planetFolder.add(obj, "orbitalDistance", 500, 5000).onChange(function () {
                                 engine.shaderMesh.material.uniforms.planetOrbitalDistances.value[obj.shaderIndex] = obj.orbitalDistance;
@@ -133,4 +134,4 @@ engine.container.appendChild(engine.stats.dom);
 engine.appendGui();
 
 // Default target
-engine.targetObj(engine.scene.children[1]);
+engine.targetObj(engine.scene.children[0]);
