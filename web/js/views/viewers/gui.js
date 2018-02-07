@@ -44,6 +44,12 @@ engine.targetObj = function (obj) {
                                 obj.material.color.g = val.g / 256;
                                 obj.material.color.b = val.b / 256;
                                 obj.material.starColor = obj.material.color;
+
+                                for (i = 0; i < engine.scene.children.length; i++) {
+                                    if (engine.scene.children[i].objType == "planet") {
+                                        engine.scene.children[i].material.specular = obj.material.starColor;
+                                    }
+                                }
                             });
                             engine.starFolder.add(obj.options, "radius", 10, 100).onChange(function () {
                                 obj.scale.set(obj.options.radius, obj.options.radius, obj.options.radius);

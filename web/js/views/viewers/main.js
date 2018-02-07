@@ -25,7 +25,7 @@ var engine = function () {
 
         // Engine ooptions
         engine.options = {};
-        engine.options.timeFactor = 1;
+        engine.options.timeFactor = 25;
         engine.options.showOrbits = true;
         engine.options.showGrid = true;
         engine.options.showWarp = true;
@@ -40,7 +40,7 @@ var engine = function () {
         document.body.appendChild(engine.container);
 
         // Ambient light
-        engine.scene.add(new THREE.AmbientLight(0x333333));
+        engine.scene.add(new THREE.AmbientLight(0x111111));
         engine.scene.children[0].name = "Ambient light";
 
         // Main Camera
@@ -210,7 +210,17 @@ var engine = function () {
                     texture.wrapS = THREE.RepeatWrapping;
                     texture.wrapT = THREE.RepeatWrapping;
                     texture.repeat.set(2, 2);
-                    var material = new THREE.MeshPhongMaterial({color: data.color, map: texture, opacity: 0.95, transparent: true, displacementMap: texture, displacementScale: 0});
+                    var material = new THREE.MeshPhongMaterial({
+                        color: data.color,
+                        map: texture,
+                        opacity: 0.95,
+                        shininess: 50,
+                        transparent: true,
+                        displacementMap: texture,
+                        lightMap: texture,
+                        specularMap: texture,
+                        displacementScale: 0
+                    });
                 } else {
                     var material = new THREE.MeshPhongMaterial({color: data.color});
                 }
