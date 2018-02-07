@@ -202,23 +202,23 @@ var engine = function () {
         switch (data.type) {
             case "planet": {
                 // Planet Object
-                var geometry = new THREE.SphereGeometry(1, 32, 32);
+                var geometry = new THREE.SphereGeometry(1, 64, 64);
                 if (data.texture) {
                     data.texture = "/" + data.texture;
                     var texture = new THREE.TextureLoader().load(data.texture);
                     texture.wrapS = THREE.RepeatWrapping;
                     texture.wrapT = THREE.RepeatWrapping;
                     texture.repeat.set(2, 2);
-                    var material = new THREE.MeshPhongMaterial({color: data.color, map: texture});
+                    var material = new THREE.MeshPhongMaterial({color: data.color, map: texture, opacity: 0.9, transparent: true, displacementMap: texture, displacementScale: 0});
                 } else {
-                    var material = new THREE.MeshPhongMaterial({color: data.color, opacity: 0.9, transparent: true});
+                    var material = new THREE.MeshPhongMaterial({color: data.color});
                 }
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
                 obj.orbitalDistance = data.orbitalDistance;
-                obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}};
+                obj.options = {"radius": data.radius, "color": {r: 1, g: 1, b: 1}, "displacementScale": 0};
                 obj.options.orbitalVelocity = data.orbitalVelocity;
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 obj.objType = "planet";
@@ -238,13 +238,13 @@ var engine = function () {
             case "star": {
                 // Star Object
                 var geometry = new THREE.SphereGeometry(1, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.5, transparent: true, });
+                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.5, transparent: true,});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
                 obj.objType = "star";
-                obj.options = {"radius": data.radius, "color": {r: 0, g: 0, b: 0}, "particleColor": {r: 0, g: 0, b: 0}};
+                obj.options = {"radius": data.radius, "color": {r: 255, g: 255, b: 255}, "particleColor": {r: 255, g: 255, b: 255}};
                 engine.star = obj;
                 engine.star.position.setY(-350);
                 obj.targetIndex = 0;
