@@ -209,9 +209,9 @@ var engine = function () {
                     texture.wrapS = THREE.RepeatWrapping;
                     texture.wrapT = THREE.RepeatWrapping;
                     texture.repeat.set(2, 2);
-                    var material = new THREE.MeshLambertMaterial({color: data.color, map: texture});
+                    var material = new THREE.MeshPhongMaterial({color: data.color, map: texture});
                 } else {
-                    var material = new THREE.MeshLambertMaterial({color: data.color, opacity: 0.9, transparent: true});
+                    var material = new THREE.MeshPhongMaterial({color: data.color, opacity: 0.9, transparent: true});
                 }
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
@@ -238,7 +238,7 @@ var engine = function () {
             case "star": {
                 // Star Object
                 var geometry = new THREE.SphereGeometry(1, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.9, transparent: true});
+                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.5, transparent: true, });
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 obj.scale.set(data.radius, data.radius, data.radius);
