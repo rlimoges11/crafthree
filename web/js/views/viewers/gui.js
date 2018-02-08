@@ -44,6 +44,7 @@ engine.targetObj = function (obj) {
                                 obj.material.color.g = val.g / 256;
                                 obj.material.color.b = val.b / 256;
                                 obj.material.starColor = obj.material.color;
+                                engine.scene.getObjectByName("starlight").color = obj.material.color;
 
                                 for (i = 0; i < engine.scene.children.length; i++) {
                                     if (engine.scene.children[i].objType == "planet") {
