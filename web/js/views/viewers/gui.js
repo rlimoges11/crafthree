@@ -93,6 +93,7 @@ engine.targetObj = function (obj) {
                                 engine.shaderMesh.material.uniforms.planetOrbitalDistances.value[obj.shaderIndex] = obj.orbitalDistance;
                             });
                             engine.planetFolder.add(obj.options, "orbitalVelocity", 10, 100); // onchange required
+                            engine.planetFolder.add(obj.options, "spin", -10, 10); // onchange required
                             engine.planetFolder.open();
                         }
                     }

@@ -110,8 +110,8 @@ var engine = function () {
         engine.renderer.setSize(window.innerWidth, window.innerHeight);
         engine.renderer.setClearColor(0x000011);
         engine.renderer.autoClear = false;
-        // engine.renderer.shadowMap.Enabled = true;
-        // engine.renderer.shadowMap.Type = THREE.PCFSoftShadowMap;
+        engine.renderer.shadowMap.Enabled = true;
+        engine.renderer.shadowMap.Type = THREE.PCFSoftShadowMap;
         engine.container.appendChild(engine.renderer.domElement);
     };
 
@@ -190,7 +190,7 @@ var engine = function () {
             engine.scanCamera.position.setY(engine.scanTarget.position.y + engine.scanTarget.options.radius * 2);
             engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.options.radius * 3 - 80);
 
-            engine.renderer.setViewport(window.innerWidth - 365, 20, 350, 250);
+            engine.renderer.setViewport(window.innerWidth - 365, 15, 350, 250);
             engine.renderer.render(engine.scene, engine.scanCamera);
         }
     };
@@ -230,8 +230,9 @@ var engine = function () {
                 obj.scale.set(data.radius, data.radius, data.radius);
                 obj.targetable = true;
                 obj.orbitalDistance = data.orbitalDistance;
-                obj.options = {"radius": data.radius, "color": {r: 1, g: 1, b: 1}};
+                obj.options = {"radius": data.radius, "color": {r: 255, g: 255, b: 255}};
                 obj.options.orbitalVelocity = data.orbitalVelocity;
+                obj.options.spin = 1;
                 obj.position.set(data.orbitalDistance, 0, data.orbitalDistance);
                 obj.objType = "planet";
 

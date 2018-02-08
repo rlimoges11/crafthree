@@ -1,6 +1,6 @@
 {% macro print(contentMatrix) %}
 
-    {% for block in contentMatrix %}
+    {% for block in contentMatrix->all() %}
 
         {% if block.type == "heading" %}
 
