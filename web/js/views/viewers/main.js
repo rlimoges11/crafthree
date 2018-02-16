@@ -140,7 +140,7 @@ var engine = function () {
                     }
                     engine.planetPositionsX[ii] = x;
                     engine.planetPositionsY[ii] = 0 - z;
-                    obj.rotateY(-0.01);
+                    obj.rotateY(-obj.options.spin / 1000);
                     engine.shaderMesh.material.uniforms.planetPositionsX.value = engine.planetPositionsX;
                     engine.shaderMesh.material.uniforms.planetPositionsY.value = engine.planetPositionsY;
                     ii++;
@@ -189,7 +189,6 @@ var engine = function () {
             engine.scanCamera.position.setX(engine.scanTarget.position.x);
             engine.scanCamera.position.setY(engine.scanTarget.position.y + engine.scanTarget.options.radius * 2);
             engine.scanCamera.position.setZ(engine.scanTarget.position.z - engine.scanTarget.options.radius * 3 - 80);
-
             engine.renderer.setViewport(window.innerWidth - 365, 15, 350, 250);
             engine.renderer.render(engine.scene, engine.scanCamera);
         }
@@ -207,14 +206,11 @@ var engine = function () {
                 if (data.texture) {
                     data.texture = "/" + data.texture;
                     var texture = new THREE.TextureLoader().load(data.texture);
-                    // texture.wrapS = THREE.RepeatWrapping;
-                    // texture.wrapT = THREE.RepeatWrapping;
-                    // texture.repeat.set(1, 1);
                     var material = new THREE.MeshPhongMaterial({
                         color: data.color,
                         map: texture,
-                        opacity: 0.95,
-                        shininess: 30,
+                        opacity: 0.97,
+                        shininess: 3,
                         transparent: true,
                         displacementMap: texture,
                         specularMap: texture,
@@ -251,7 +247,7 @@ var engine = function () {
             case "star": {
                 // Star Object
                 var geometry = new THREE.SphereGeometry(1, 32, 32);
-                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.5, transparent: true,});
+                var material = new THREE.MeshBasicMaterial({color: data.color, opacity: 0.5, transparent: true});
                 var obj = new THREE.Mesh(geometry, material);
                 obj.name = data.name;
                 obj.scale.set(data.radius, data.radius, data.radius);
